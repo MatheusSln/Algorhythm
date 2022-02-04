@@ -1,4 +1,6 @@
+using Algorhythm.Business.Interfaces;
 using Algorhythm.Data.Context;
+using Algorhythm.Data.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -33,6 +35,11 @@ namespace Algorhythm.Api
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
+
+            services.AddScoped<AlgorhythmDbContext>();
+            services.AddScoped<IAlternativeRepository, AlternativeRepository>();
+            services.AddScoped<IExerciseRepository, ExerciseRepository>();
+            services.AddScoped<IModuleRepository, ModuleRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
