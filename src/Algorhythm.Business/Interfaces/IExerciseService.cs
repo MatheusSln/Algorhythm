@@ -6,8 +6,8 @@ namespace Algorhythm.Business.Interfaces
 {
     public interface IExerciseService : IDisposable
     {
-        Task<bool> Add(Exercise exercise);
-        Task<bool> Update(Exercise exercise);
-        Task<bool> Remove(Guid id);
+        Task Add(Exercise exercise);
+        Task Update(Exercise exercise);
+        Task Remove(Guid id);
     }
 }

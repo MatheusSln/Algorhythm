@@ -1,6 +1,6 @@
 ﻿using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
-using Algorhythm.Business.Notificacoes;
+using Algorhythm.Business.Notifications;
 using FluentValidation;
 using FluentValidation.Results;
 
@@ -8,33 +8,33 @@ namespace Algorhythm.Business.Services
 {
     public class BaseService
     {
-        private readonly INotificador _notificador;
+        private readonly INotifier _notifier;
 
-        protected BaseService(INotificador notificador)
+        protected BaseService(INotifier notifier)
         {
-            _notificador = notificador;
+            _notifier = notifier;
         }
 
-        protected void Notificar(ValidationResult validationResult)
+        protected void Notify(ValidationResult validationResult)
         {
             foreach (var error in validationResult.Errors)
             {
-                Notificar(error.ErrorMessage);
+                Notify(error.ErrorMessage);
             }
         }
 
-        protected void Notificar(string mensagem)
+        protected void Notify(string message)
         {
-            _notificador.Handle(new Notificacao(mensagem));
+            _notifier.Handle(new Notification(message));
         }
 
-        protected bool ExecutarValidacao<TV, TE>(TV validacao, TE entidade) where TV : AbstractValidator<TE> where TE : Base
+        protected bool ExecuteValidation<TV, TE>(TV validation, TE entity) where TV : AbstractValidator<TE> where TE : Base
         {
-            var validator = validacao.Validate(entidade);
+            var validator = validation.Validate(entity);
 
             if (validator.IsValid) return true;
 
-            Notificar(validator);
+            Notify(validator);
 
             return false;
         }

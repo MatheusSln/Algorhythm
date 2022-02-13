@@ -10,34 +10,31 @@ namespace Algorhythm.Business.Services
     {
         private readonly IExerciseRepository _exerciseRepository;
 
-        public ExerciseService(IExerciseRepository exerciseRepository, INotificador notificador) : 
-            base(notificador)
+        public ExerciseService(IExerciseRepository exerciseRepository, INotifier notifier) : 
+            base(notifier)
         {
             _exerciseRepository = exerciseRepository;
         }
 
-        public async Task<bool> Add(Exercise exercise)
+        public async Task Add(Exercise exercise)
         {
-            if (!ExecutarValidacao(new ExerciseValidation(), exercise)) 
-                return false;
+            if (!ExecuteValidation(new ExerciseValidation(), exercise))
+                return;
 
             await _exerciseRepository.Add(exercise);
-            return true;
         }
 
-        public async Task<bool> Update(Exercise exercise)
+        public async Task Update(Exercise exercise)
         {
-            if (!ExecutarValidacao(new ExerciseValidation(), exercise))
-                return false;
+            if (!ExecuteValidation(new ExerciseValidation(), exercise))
+                return;
 
             await _exerciseRepository.Update(exercise);
-            return true;
         }
 
-        public async Task<bool> Remove(Guid id)
+        public async Task Remove(Guid id)
         {
             await _exerciseRepository.Remove(id);
-            return true;
         }
 
         public void Dispose()

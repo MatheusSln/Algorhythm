@@ -10,15 +10,15 @@ namespace Algorhythm.Business.Services
     {
         private readonly IAlternativeRepository _alternativeRepository;
 
-        protected AlternativeService(INotificador notificador, IAlternativeRepository alternativeRepository) :
-            base(notificador)
+        protected AlternativeService(INotifier notifier, IAlternativeRepository alternativeRepository) :
+            base(notifier)
         {
             _alternativeRepository = alternativeRepository;
         }
 
         public async Task Add(Alternative alternative)
         {
-            if (!ExecutarValidacao(new AlternativeValidation(), alternative))
+            if (!ExecuteValidation(new AlternativeValidation(), alternative))
                 return;
 
             await _alternativeRepository.Add(alternative);
@@ -26,7 +26,7 @@ namespace Algorhythm.Business.Services
 
         public async Task Update(Alternative alternative)
         {
-            if (!ExecutarValidacao(new AlternativeValidation(), alternative))
+            if (!ExecuteValidation(new AlternativeValidation(), alternative))
                 return;
 
             await _alternativeRepository.Update(alternative);

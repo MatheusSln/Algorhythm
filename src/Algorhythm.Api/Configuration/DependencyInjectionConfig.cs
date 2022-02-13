@@ -1,5 +1,5 @@
 ﻿using Algorhythm.Business.Interfaces;
-using Algorhythm.Business.Notificacoes;
+using Algorhythm.Business.Notifications;
 using Algorhythm.Business.Services;
 using Algorhythm.Data.Context;
 using Algorhythm.Data.Repository;
@@ -18,7 +18,7 @@ namespace Algorhythm.Api.Configuration
 
             services.AddScoped<IExerciseService, ExerciseService>();
             services.AddScoped<IAlternativeService, AlternativeService>();
-            services.AddScoped<INotificador, Notificador>();
+            services.AddScoped<INotifier, Notifier>();
 
             return services;
         }
