@@ -1,4 +1,6 @@
 ﻿using Algorhythm.Business.Interfaces;
+using Algorhythm.Business.Notificacoes;
+using Algorhythm.Business.Services;
 using Algorhythm.Data.Context;
 using Algorhythm.Data.Repository;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +15,10 @@ namespace Algorhythm.Api.Configuration
             services.AddScoped<IAlternativeRepository, AlternativeRepository>();
             services.AddScoped<IExerciseRepository, ExerciseRepository>();
             services.AddScoped<IModuleRepository, ModuleRepository>();
+
+            services.AddScoped<IExerciseService, ExerciseService>();
+            services.AddScoped<IAlternativeService, AlternativeService>();
+            services.AddScoped<INotificador, Notificador>();
 
             return services;
         }
