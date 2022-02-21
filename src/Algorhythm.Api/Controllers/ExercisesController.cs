@@ -2,6 +2,7 @@
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace Algorhythm.Api.Controllers
 {
+    [Authorize]
     [Route("api/exercises")]
     public class ExercisesController : MainController
     {
@@ -27,6 +29,7 @@ namespace Algorhythm.Api.Controllers
             _exerciseService = exerciseService;
         }
 
+        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<ExerciseDto>> GetAll()
         {

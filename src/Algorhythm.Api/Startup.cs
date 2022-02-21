@@ -27,6 +27,8 @@ namespace Algorhythm.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddIdentityConfiguration(Configuration);
+
             services.AddControllers();
 
             services.AddAutoMapper(typeof(Startup));
@@ -46,6 +48,8 @@ namespace Algorhythm.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseAuthentication();
 
             app.UseHttpsRedirection();
 

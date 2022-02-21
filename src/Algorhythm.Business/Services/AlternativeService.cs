@@ -10,7 +10,7 @@ namespace Algorhythm.Business.Services
     {
         private readonly IAlternativeRepository _alternativeRepository;
 
-        protected AlternativeService(INotifier notifier, IAlternativeRepository alternativeRepository) :
+        public AlternativeService(INotifier notifier, IAlternativeRepository alternativeRepository) :
             base(notifier)
         {
             _alternativeRepository = alternativeRepository;
