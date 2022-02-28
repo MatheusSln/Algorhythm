@@ -11,9 +11,13 @@ namespace Algorhythm.Business.Models
 
         public string CorrectAnswer { get; set; }
 
+        public string Explanation { get; set; }
+
         // EF Relations
         public Module Module { get; set; }
 
         public IEnumerable<Alternative> Alternatives { get; set; }
+
+        public List<User> Users { get; set; }
     }
 }

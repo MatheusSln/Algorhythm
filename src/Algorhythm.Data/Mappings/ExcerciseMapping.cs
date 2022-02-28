@@ -18,6 +18,10 @@ namespace Algorhythm.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 
+            builder.Property(e => e.Explanation)
+                .IsRequired()
+                .HasColumnType("varchar(300)");
+
             // 1 : N Excercise : Alternatives
 
             builder.HasMany(e => e.Alternatives)

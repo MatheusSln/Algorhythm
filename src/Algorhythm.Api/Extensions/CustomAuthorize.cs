@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace Algorhythm.Api.Extensions
 {
-    public class CustomAuthorization
+    public static class CustomAuthorization
     {
         public static bool ValidateClaimsUser(HttpContext context, string claimName, string claimValue)
         {
