@@ -77,7 +77,19 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       if (this.registerForm.dirty && this.registerForm.valid) {
           this.user =  Object.assign({}, this.user, this.registerForm.value);
 
-          this.accountService.registerUser(this.user);
+          this.accountService.registerUser(this.user)
+          .subscribe(
+            success => {this.proccessSuccess(success)},
+            fail => {this.proccessFail(fail)}
+          );
       }
+  }
+
+  proccessSuccess(response : any){
+
+  }
+
+  proccessFail(fail : any){
+
   }
 }

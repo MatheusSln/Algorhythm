@@ -57,6 +57,12 @@ namespace Algorhythm.Api
 
             app.UseAuthorization();
 
+            app.UseCors(c=> 
+            {
+                c.AllowAnyOrigin();
+                c.AllowAnyHeader();
+            });
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

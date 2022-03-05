@@ -19,27 +19,36 @@ namespace Algorhythm.Api.Controllers
     {
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
         private readonly AppSettings _appSettings;
         public AuthController(INotifier notifier,
                               SignInManager<IdentityUser> signInManager,
-                              UserManager<IdentityUser> userManager, 
-                              IOptions<AppSettings> appSettings) :
+                              UserManager<IdentityUser> userManager,
+                              IOptions<AppSettings> appSettings,
+                              IUserRepository userRepository, 
+                              IUserService userService) :
             base(notifier)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _userRepository = userRepository;
+            _userService = userService;
         }
+
 
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDto registerUser)
         {
+            /// TODO: INSERIR O USUÁRIO NA TABELA USERS JUNTO COM ASP.NETUSERS
+
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
             var user = new IdentityUser
             {
-                UserName = registerUser.Email,
+                UserName = registerUser.Name,
                 Email = registerUser.Email,
                 EmailConfirmed = true
             };
@@ -61,7 +70,8 @@ namespace Algorhythm.Api.Controllers
 
         [HttpPost("entrar")]
         public async Task<ActionResult> Login(LoginUserDto loginUser)
-        {
+        {            
+
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
@@ -81,6 +91,8 @@ namespace Algorhythm.Api.Controllers
 
         private async Task<LoginResponseDto> GerarJwt(string email)
         {
+            /// TODO: Buscar nível do usuário e adicionar ao token;
+
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
             var userRoles = await _userManager.GetRolesAsync(user);

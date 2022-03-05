@@ -15,9 +15,11 @@ namespace Algorhythm.Api.Configuration
             services.AddScoped<IAlternativeRepository, AlternativeRepository>();
             services.AddScoped<IExerciseRepository, ExerciseRepository>();
             services.AddScoped<IModuleRepository, ModuleRepository>();
+            services.AddScoped<IUserRepository, UserRepository>();
 
             services.AddScoped<IExerciseService, ExerciseService>();
             services.AddScoped<IAlternativeService, AlternativeService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotifier, Notifier>();
 
             return services;
