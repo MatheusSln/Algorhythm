@@ -13,8 +13,6 @@ namespace Algorhythm.Business.Models.Validations
             RuleFor(e => e.Email)
                 .NotEmpty().WithMessage("o campo e-mail precisa ser preenchido");
 
-            RuleFor(a => a.Age)
-                .LessThan(6).WithMessage("O campo idade precisa ser maior que 5");
         }
     }
 }

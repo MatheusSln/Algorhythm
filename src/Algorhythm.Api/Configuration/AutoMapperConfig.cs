@@ -10,6 +10,7 @@ namespace Algorhythm.Api.Configuration
         {
             CreateMap<Exercise, ExerciseDto>().ReverseMap();
             CreateMap<Alternative, AlternativeDto>().ReverseMap();
+            CreateMap<User, RegisterUserDto>().ReverseMap();
         }
     }
 }

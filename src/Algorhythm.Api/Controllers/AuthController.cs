@@ -1,6 +1,8 @@
 ﻿using Algorhythm.Api.Dtos;
 using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
+using Algorhythm.Business.Models;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -20,14 +22,16 @@ namespace Algorhythm.Api.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepository;
+        private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly AppSettings _appSettings;
         public AuthController(INotifier notifier,
                               SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
                               IOptions<AppSettings> appSettings,
-                              IUserRepository userRepository, 
-                              IUserService userService) :
+                              IUserRepository userRepository,
+                              IUserService userService, 
+                              IMapper mapper) :
             base(notifier)
         {
             _signInManager = signInManager;
@@ -35,29 +39,39 @@ namespace Algorhythm.Api.Controllers
             _appSettings = appSettings.Value;
             _userRepository = userRepository;
             _userService = userService;
+            _mapper = mapper;
         }
-
 
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDto registerUser)
         {
-            /// TODO: INSERIR O USUÁRIO NA TABELA USERS JUNTO COM ASP.NETUSERS
 
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
-            var user = new IdentityUser
+            var user  = await _userRepository.GetUserAndExercisesByEmail(registerUser.Email);
+
+            if (!(user is null))
             {
-                UserName = registerUser.Name,
+                NotifyError("E-mail já vinculado a uma conta previamente cadastrada");
+                return CustomResponse(registerUser);
+            }
+
+            await _userService.Add(_mapper.Map<User>(registerUser));
+
+            var identityUser = new IdentityUser
+            {
+                UserName = registerUser.Email,
+                NormalizedUserName = registerUser.Name,
                 Email = registerUser.Email,
                 EmailConfirmed = true
             };
-
-            var result = await _userManager.CreateAsync(user, registerUser.Password);
-
+            
+            var result = await _userManager.CreateAsync(identityUser, registerUser.Password);
+           
             if (result.Succeeded)
             {
-                await _signInManager.SignInAsync(user, false);
+                await _signInManager.SignInAsync(identityUser, false);
                 return CustomResponse(await GerarJwt(registerUser.Email));
             }
             foreach (var erro in result.Errors)
@@ -91,8 +105,6 @@ namespace Algorhythm.Api.Controllers
 
         private async Task<LoginResponseDto> GerarJwt(string email)
         {
-            /// TODO: Buscar nível do usuário e adicionar ao token;
-
             var user = await _userManager.FindByEmailAsync(email);
             var claims = await _userManager.GetClaimsAsync(user);
             var userRoles = await _userManager.GetRolesAsync(user);
@@ -107,6 +119,10 @@ namespace Algorhythm.Api.Controllers
             {
                 claims.Add(new Claim("role", userRole));
             }
+
+            var userLevel = await _userRepository.GetUserAndExercisesByEmail(email);
+
+            claims.Add(new Claim("level", userLevel.Level.ToString()));
 
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
