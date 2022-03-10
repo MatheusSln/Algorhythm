@@ -59,7 +59,6 @@ namespace Algorhythm.Api.Controllers
             var identityUser = new IdentityUser
             {
                 UserName = registerUser.Email,
-                NormalizedUserName = registerUser.Name,
                 Email = registerUser.Email,
                 EmailConfirmed = true
             };
@@ -104,12 +103,12 @@ namespace Algorhythm.Api.Controllers
 
         private async Task<LoginResponseDto> GerarJwt(string email)
         {
-            var user = await _userManager.FindByEmailAsync(email);
-            var claims = await _userManager.GetClaimsAsync(user);
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var aspNetUser = await _userManager.FindByEmailAsync(email);
+            var claims = await _userManager.GetClaimsAsync(aspNetUser);
+            var userRoles = await _userManager.GetRolesAsync(aspNetUser);
 
-            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Id));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Sub, aspNetUser.Id));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Email, aspNetUser.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
@@ -119,9 +118,10 @@ namespace Algorhythm.Api.Controllers
                 claims.Add(new Claim("role", userRole));
             }
 
-            var userLevel = await _userRepository.GetUserAndExercisesByEmail(email);
+            var user = await _userRepository.GetUserAndExercisesByEmail(email);
 
-            claims.Add(new Claim("level", userLevel.Level.ToString()));
+            claims.Add(new Claim("level", user.Level.ToString()));
+            claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.Name));
 
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
@@ -145,8 +145,8 @@ namespace Algorhythm.Api.Controllers
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
                 UserToken = new UserTokenDto
                 {
-                    Id = user.Id,
-                    Email = user.Email,
+                    Id = aspNetUser.Id,
+                    Email = aspNetUser.Email,
                     Claims = claims.Select(c => new ClaimDto { Type = c.Type, Value = c.Value })
                 }
             };
