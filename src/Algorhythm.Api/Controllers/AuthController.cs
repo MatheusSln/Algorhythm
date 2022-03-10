@@ -45,7 +45,6 @@ namespace Algorhythm.Api.Controllers
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDto registerUser)
         {
-
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
@@ -56,8 +55,6 @@ namespace Algorhythm.Api.Controllers
                 NotifyError("E-mail já vinculado a uma conta previamente cadastrada");
                 return CustomResponse(registerUser);
             }
-
-            await _userService.Add(_mapper.Map<User>(registerUser));
 
             var identityUser = new IdentityUser
             {
@@ -71,6 +68,8 @@ namespace Algorhythm.Api.Controllers
            
             if (result.Succeeded)
             {
+                await _userService.Add(_mapper.Map<User>(registerUser));
+
                 await _signInManager.SignInAsync(identityUser, false);
                 return CustomResponse(await GerarJwt(registerUser.Email));
             }

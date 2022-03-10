@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControl, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { CustomValidators } from '@narik/custom-validators';
 import { fromEvent, merge, Observable } from 'rxjs';
 
@@ -24,7 +25,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   displayMessage: DisplayMessage = {};
 
   constructor(private fb: FormBuilder,
-              private accountService: AccountService) {
+              private accountService: AccountService,
+              private router: Router) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -86,10 +88,15 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   proccessSuccess(response : any){
+      this.registerForm.reset();
+      this.errors = [];
 
+      this.accountService.LocalStorage.saveLocalDataUser(response);
+
+      this.router.navigate(['/home']);
   }
 
   proccessFail(fail : any){
-
+      this.errors = fail.error.errors;
   }
 }

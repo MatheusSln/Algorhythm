@@ -1,14 +1,17 @@
 import { HttpErrorResponse, HttpHeaders } from "@angular/common/http"
 import { throwError } from "rxjs";
+import { LocalStorageUtils } from "../utils/localstorage";
 
 export abstract class BaseService{
+
+    public LocalStorage = new LocalStorageUtils();
+
     protected UrlServiceV1: string = "https://localhost:5001/api/";
 
     protected GetHeaderJson() {
         return {
             headers: new HttpHeaders({
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
+                'Content-Type': 'application/json'
             })
         };
     }
