@@ -20,7 +20,13 @@ export class AccountService extends BaseService{
         return response;
     }
 
-    login(user : User){
-        
+    login(user : User) : Observable<User>{
+        let response = this.http
+            .post(this.UrlServiceV1 + 'entrar', user, this.GetHeaderJson())
+            .pipe(
+                map(this.extractData),
+                catchError(this.serviceError));
+
+        return response;        
     }
 }
