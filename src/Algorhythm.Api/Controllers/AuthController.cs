@@ -108,7 +108,6 @@ namespace Algorhythm.Api.Controllers
             var userRoles = await _userManager.GetRolesAsync(aspNetUser);
 
             claims.Add(new Claim(JwtRegisteredClaimNames.Sub, aspNetUser.Id));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Email, aspNetUser.Email));
             claims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Nbf, ToUnixEpochDate(DateTime.UtcNow).ToString()));
             claims.Add(new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(DateTime.UtcNow).ToString(), ClaimValueTypes.Integer64));
@@ -121,7 +120,6 @@ namespace Algorhythm.Api.Controllers
             var user = await _userRepository.GetUserAndExercisesByEmail(email);
 
             claims.Add(new Claim("level", user.Level.ToString()));
-            claims.Add(new Claim(JwtRegisteredClaimNames.Name, user.Name));
 
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);
@@ -147,6 +145,7 @@ namespace Algorhythm.Api.Controllers
                 {
                     Id = aspNetUser.Id,
                     Email = aspNetUser.Email,
+                    Name = user.Name,
                     Claims = claims.Select(c => new ClaimDto { Type = c.Type, Value = c.Value })
                 }
             };
