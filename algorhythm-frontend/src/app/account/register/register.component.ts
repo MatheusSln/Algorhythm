@@ -21,6 +21,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   registerForm: FormGroup;
   user: User;
 
+  notSavedChanges: boolean;
+
   validationMessage: ValidationMessages;
   genericValidator: GenericValidator;
   displayMessage: DisplayMessage = {};
@@ -74,6 +76,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
     merge(...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.registerForm);
+      this.notSavedChanges = true;
     });      
   }
 
@@ -86,6 +89,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
             success => {this.proccessSuccess(success)},
             fail => {this.proccessFail(fail)}
           );
+
+          this.notSavedChanges = false;
       }
   }
 

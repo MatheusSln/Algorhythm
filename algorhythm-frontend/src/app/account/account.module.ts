@@ -12,6 +12,8 @@ import { AccountAppComponent } from './account.app.component';
 import { AccountService } from './services/account.service';
 import { CustomFormsModule } from 'ngx-custom-validators';
 
+import { AccountGuard } from './services/account.guard';
+
 @NgModule({
   declarations: [
     AccountAppComponent,
@@ -28,7 +30,8 @@ import { CustomFormsModule } from 'ngx-custom-validators';
     CustomFormsModule
   ],
   providers: [
-    AccountService
+    AccountService,
+    AccountGuard
   ]
 })
 export class AccountModule { }
