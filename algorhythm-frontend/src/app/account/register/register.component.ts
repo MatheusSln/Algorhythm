@@ -7,6 +7,7 @@ import { fromEvent, merge, Observable } from 'rxjs';
 import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/utils/generic-form-validation';
 import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-register',
@@ -26,7 +27,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
 
   constructor(private fb: FormBuilder,
               private accountService: AccountService,
-              private router: Router) {
+              private router: Router,
+              private toastr: ToastrService) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -92,10 +94,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       this.errors = [];
       this.accountService.LocalStorage.saveLocalDataUser(response);
 
+      this.toastr.success('Registro realizado com sucesso!', 'Bem vindo!');
+
       this.router.navigate(['/home']);
   }
 
   proccessFail(fail : any){
       this.errors = fail.error.errors;
+      this.toastr.error('Ocorreu um erro!', 'Opa :(');
   }
 }
