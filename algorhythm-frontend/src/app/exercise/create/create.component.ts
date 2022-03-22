@@ -1,14 +1,114 @@
-import { Component, OnInit } from '@angular/core';
+import { Exercise } from './../models/exercise';
+import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { ExerciseService } from '../services/exercise.service';
+import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/utils/generic-form-validation';
+import { Observable } from 'rxjs/internal/Observable';
+import { fromEvent } from 'rxjs/internal/observable/fromEvent';
+import { merge } from 'rxjs/internal/observable/merge';
+import { CustomValidators } from 'ngx-custom-validators';
 
 @Component({
   selector: 'app-create',
   templateUrl: './create.component.html'
 })
-export class CreateComponent implements OnInit {
+export class CreateComponent implements OnInit, AfterViewInit {
 
-  constructor() { }
+  @ViewChildren(FormControlName, {read: ElementRef}) formInputElements: ElementRef[];
+
+createForm : FormGroup;
+
+notSavedChanges: boolean;
+
+modules = [
+  {id : 1, title: "Introdução a Algoritmos", level: 1},
+  {id : 2, title: "Operadores de atribuição", level: 2},
+  {id : 3, title: "Operadores aritméticos", level: 3},
+  {id : 4, title: "Operadores de incremento e decremento", level: 4},
+  {id : 5, title: "Operadores lógicos e relacionais", level: 5},
+  {id : 6, title: "Operações de entrada e saída", level: 6},
+  {id : 7, title: "Estruturas condicionais", level: 7},
+  {id : 8, title: "Estruturas de repetição", level: 8}
+]
+
+exercise : Exercise = {
+  moduleId : "0",
+  question : "",
+  level : "",
+  alternatives : [],
+  correctAlternative: ""
+};
+
+displayMessage: DisplayMessage = {};
+
+newAlternative : string;
+genericValidator: GenericValidator;
+validationMessage: ValidationMessages;
+correctAlternative : string = "";
+
+  constructor(private fb: FormBuilder, private toastr: ToastrService, private exerciseService: ExerciseService) {
+      this.validationMessage={
+        moduleId:{
+          required: 'Informe o modulo'
+        },
+        question:{
+          required: 'Informe o enunciado',
+          rangeLength: 'o enunciado precisa ter no mínimo 10 caracteres'
+        },
+        alternatives:{
+          required: 'informe 4 alternativas'
+        },
+        correctAlternative:{
+          required: 'Informe a resposta da questão'
+        }        
+      };
+      this.genericValidator = new GenericValidator(this.validationMessage);
+   }
 
   ngOnInit(): void {
+    this.createForm = this.fb.group({
+      moduleId: ['', [Validators.required]],
+      question: ['', [Validators.required, CustomValidators.rangeLength([10,300])]],
+      correctAlternative: ['', [Validators.required]],
+      alternatives:[[], [Validators.required]]
+    });
   }
 
+  ngAfterViewInit(): void {
+    let controlBlurs: Observable<any>[] = this.formInputElements
+      .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+
+    merge(...controlBlurs).subscribe(() => {
+      this.displayMessage = this.genericValidator.processMessages(this.createForm);
+      this.notSavedChanges = true;
+    });      
+  }  
+
+  addAlternative(value: string){
+    if(value == "")
+    return
+
+    if (this.exercise.alternatives.find((element) => element == value))
+    return
+
+    if(this.exercise.alternatives.length >= 4){
+      this.toastr.info("Máximo de 4 alternativas atingido", "Aviso!")
+      return
+    }
+    this.exercise.alternatives.push(value)
+    this.newAlternative = ""
+  }
+
+  removeAlternative(value: string){
+    this.exercise.alternatives.splice(this.exercise.alternatives.indexOf(value), 1)
+  }
+
+  setCorrectAlternative(){
+
+  }
+
+  createExercise(){
+
+  }
 }

@@ -10,6 +10,7 @@ import { DeleteComponent } from "./delete/delete.component";
 import { ExerciseAppComponent } from "./exercise.app.component";
 import { ExerciseRoutingModule } from "./exercise.route";
 import { ListComponent } from "./list/list.component";
+import { ExerciseService } from "./services/exercise.service";
 
 @NgModule({
     declarations: [
@@ -27,6 +28,7 @@ import { ListComponent } from "./list/list.component";
         CustomFormsModule
     ],
     providers: [
+      ExerciseService
     ]
   })
   export class ExerciseModule { }

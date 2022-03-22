@@ -1,1 +1,52 @@
-<p>create works!</p>
+<div class="container main-container">
+    <form novalidate [formGroup]="createForm" (ngSubmit)="createExercise()">
+        <h4>Crie um exercício</h4>
+        <hr>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Módulo</label>
+            <div class="col-md-10">
+                <select class="form-control" id="module" formControlName="moduleId" >
+                    <option [ngValue]="null" disabled>Selecione um módulo</option>
+                    <option *ngFor="let module of modules" [ngValue]="module.id">{{ module.title }}</option>
+                </select>
+                <span class="text-danger" *ngIf="displayMessage.moduleId">
+                  <p [innerHTML]="displayMessage.name"></p>
+              </span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">Enunciado</label>
+            <div class="col-md-10">
+                <input class="form-control" placeholder="Enunciado do exercício (obrigatório)" formControlName="question" />
+                <span class="text-danger" *ngIf="displayMessage.question">
+                  <p [innerHTML]="displayMessage.name"></p>
+              </span>
+            </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Alternativas</label>
+          <div class="col-md-4">
+              <div class="input-group-append">
+                <input [(ngModel)]="newAlternative" [ngModelOptions]="{standalone: true}" type="text" class="form-control"/>
+                <button type="button" class="btn btn-primary " (click)="addAlternative(newAlternative)">Add</button>
+              </div>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let alternative of exercise.alternatives">{{alternative}}
+                      <button type="button" class="badge badge-danger" (click)="removeAlternative(alternative)">remover</button></li>
+                </ul>
+          </div>
+      </div>
+        <div class="form-group">
+          <label class="col-md-3 control-label">Alternativa correta</label>
+          <div class="col-md-10">
+            <select class="form-control" formControlName="correctAlternative" (change)="setCorrectAlternative()" (blur)="setCorrectAlternative()">
+              <option [ngValue]="" disabled>Selecione uma palavra</option>
+              <option *ngFor="let alternative of exercise.alternatives" [ngValue]="">{{ alternative }}</option>
+          </select>
+          <span class="text-danger" *ngIf="displayMessage.correctAlternative">
+            <p [innerHTML]="displayMessage.name"></p>
+        </span>
+          </div>
+      </div>
+    </form>
+</div>

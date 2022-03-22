@@ -1,3 +1,4 @@
+import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
@@ -18,8 +19,9 @@ import { ToastrModule } from 'ngx-toastr';
     AppRoutingModule,
     NavigationModule,
     NgbModule,
-    BrowserAnimationsModule, 
-    ToastrModule.forRoot()
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
