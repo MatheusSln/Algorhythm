@@ -1,6 +1,7 @@
 import { EnumType } from "typescript";
 
 export class Exercise{
+  id: string;
   moduleId: number;
   question: string;
   level: number;

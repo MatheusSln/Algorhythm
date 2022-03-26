@@ -14,7 +14,7 @@ namespace Algorhythm.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(300)");
 
-            builder.Property(e => e.CorrectAnswer)
+            builder.Property(e => e.CorrectAlternative)
                 .IsRequired()
                 .HasColumnType("varchar(100)");
 

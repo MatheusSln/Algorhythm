@@ -9,7 +9,7 @@ namespace Algorhythm.Business.Models
 
         public string Question { get; set; }
 
-        public string CorrectAnswer { get; set; }
+        public string CorrectAlternative { get; set; }
 
         public string Explanation { get; set; }
 

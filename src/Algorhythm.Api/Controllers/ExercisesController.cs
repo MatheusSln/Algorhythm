@@ -29,13 +29,10 @@ namespace Algorhythm.Api.Controllers
             _exerciseService = exerciseService;
         }
 
-        [AllowAnonymous]
         [HttpGet]
         public async Task<IEnumerable<ExerciseDto>> GetAll()
         {
-            var exercises = _mapper.Map<IEnumerable<ExerciseDto>>(await _exerciseRepository.GetAll());
-
-            return exercises;
+            return _mapper.Map<IEnumerable<ExerciseDto>>(await _exerciseRepository.GetAllExercisesAndAlternatives());
         }
 
         [HttpGet("{id:guid}")]
@@ -55,20 +52,16 @@ namespace Algorhythm.Api.Controllers
             if (!ModelState.IsValid) 
                 return CustomResponse(ModelState);
 
-            var exercise = new Exercise 
-            {
-                ModuleId = exerciseDto.ModuleId,
-                CorrectAnswer = exerciseDto.correctAlternative,
-                Alternatives = exerciseDto.Alternatives.Select(s => new Alternative { Title = s}).ToList(),
-                Question = exerciseDto.Question,
-            };
+            exerciseDto.Id = null;
+
+            var exercise = _mapper.Map<Exercise>(exerciseDto);
             await _exerciseService.Add(exercise);
 
             return CustomResponse(exerciseDto);
         }
 
         [HttpPut]
-        public async Task<ActionResult<ExerciseDto>> Update(Guid id, ExerciseDto exerciseDto)
+        public async Task<ActionResult<ExerciseDto>> Update(string id, ExerciseDto exerciseDto)
         {
             if (id != exerciseDto.Id)
             {

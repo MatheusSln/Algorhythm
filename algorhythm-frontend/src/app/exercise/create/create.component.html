@@ -21,7 +21,8 @@
         <div class="form-group">
             <label class="col-md-2 control-label">Enunciado</label>
             <div class="col-md-10">
-                <input class="form-control" placeholder="Enunciado do exercício (obrigatório)" formControlName="question" [ngClass]="{'is-invalid': displayMessage.question }"/>
+                <textarea class="form-control" placeholder="Enunciado do exercício (obrigatório)" formControlName="question" [ngClass]="{'is-invalid': displayMessage.question }">
+                </textarea>
                 <span class="text-danger" *ngIf="displayMessage.question">
                   <p [innerHTML]="displayMessage.question"></p>
               </span>

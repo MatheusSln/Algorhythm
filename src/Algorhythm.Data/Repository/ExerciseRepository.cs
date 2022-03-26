@@ -22,5 +22,11 @@ namespace Algorhythm.Data.Repository
         {
             return await Search(e => e.ModuleId == moduleId);
         }
+
+        public async Task<IEnumerable<Exercise>> GetAllExercisesAndAlternatives()
+        {
+            return await Db.Exercises.AsNoTracking().Include(a => a.Alternatives)
+                .ToListAsync();
+        }
     }
 }

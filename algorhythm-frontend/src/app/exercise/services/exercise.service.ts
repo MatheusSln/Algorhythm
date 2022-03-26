@@ -19,4 +19,10 @@ export class ExerciseService extends BaseService{
 
         return response;
     }
+
+    getAll(): Observable<Exercise[]> {
+        return this.http
+            .get<Exercise[]>(this.UrlServiceV1 + "exercises")
+            .pipe(catchError(super.serviceError));
+    }    
 }

@@ -36,6 +36,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
   errors: any[] = [];
 
   exercise: Exercise = {
+    id: "",
     moduleId: 0,
     question: "",
     level: 0,

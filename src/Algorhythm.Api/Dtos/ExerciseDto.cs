@@ -8,7 +8,7 @@ namespace Algorhythm.Api.Dtos
     public class ExerciseDto
     {
         [Key]
-        public Guid Id { get; set; }
+        public string Id { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório")]
         public int ModuleId { get; set; }
@@ -20,8 +20,9 @@ namespace Algorhythm.Api.Dtos
         public List<string> Alternatives { get; set; }
 
         [Required(ErrorMessage = "Este campo é obrigatório")]
-        public string correctAlternative { get; set; }
+        public string CorrectAlternative { get; set; }
 
         public int Level { get; set; }
+
     }
 }
