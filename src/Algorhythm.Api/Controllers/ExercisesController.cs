@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Algorhythm.Api.Controllers
 {
-    [Authorize]
     [Route("api/exercises")]
     public class ExercisesController : MainController
     {
@@ -55,7 +55,13 @@ namespace Algorhythm.Api.Controllers
             if (!ModelState.IsValid) 
                 return CustomResponse(ModelState);
 
-            var exercise = _mapper.Map<Exercise>(exerciseDto);
+            var exercise = new Exercise 
+            {
+                ModuleId = exerciseDto.ModuleId,
+                CorrectAnswer = exerciseDto.correctAlternative,
+                Alternatives = exerciseDto.Alternatives.Select(s => new Alternative { Title = s}).ToList(),
+                Question = exerciseDto.Question,
+            };
             await _exerciseService.Add(exercise);
 
             return CustomResponse(exerciseDto);

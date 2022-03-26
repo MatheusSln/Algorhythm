@@ -12,7 +12,8 @@ export abstract class BaseService{
     protected GetHeaderJson() {
         return {
             headers: new HttpHeaders({
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*'
             })
         };
     }

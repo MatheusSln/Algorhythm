@@ -2,13 +2,13 @@
 {
     public enum Level
     {
-        Introduction = 0,
-        Assignment = 1,
-        Arithmetic = 2,
-        IncrementAndDecrement = 3,
-        LogicalAndRelational = 4,
-        EntranceAndExit = 5,
-        Conditional = 6,
-        Repetition = 7
+        Introduction = 1,
+        Assignment = 2,
+        Arithmetic = 3,
+        IncrementAndDecrement = 4,
+        LogicalAndRelational = 5,
+        EntranceAndExit = 6,
+        Conditional = 7,
+        Repetition = 8
     }
 }

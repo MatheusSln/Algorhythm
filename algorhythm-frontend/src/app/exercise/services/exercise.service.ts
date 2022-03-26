@@ -10,7 +10,7 @@ export class ExerciseService extends BaseService{
 
     constructor (private http: HttpClient){ super(); }
 
-    registerUser(exercise: Exercise) : Observable<Exercise> {
+    createExercise(exercise: Exercise) : Observable<Exercise> {
         let response = this.http
             .post(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
             .pipe(

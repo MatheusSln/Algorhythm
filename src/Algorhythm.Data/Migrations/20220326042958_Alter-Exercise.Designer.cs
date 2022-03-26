@@ -7,19 +7,22 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace Algorhythm.Data.Migrations
 {
     [DbContext(typeof(AlgorhythmDbContext))]
-    [Migration("20220228213113_Exercise")]
-    partial class Exercise
+    [Migration("20220326042958_Alter-Exercise")]
+    partial class AlterExercise
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.13")
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.0")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("Algorhythm.Business.Models.Alternative", b =>
                 {
@@ -38,7 +41,7 @@ namespace Algorhythm.Data.Migrations
 
                     b.HasIndex("ExerciseId");
 
-                    b.ToTable("Alternatives");
+                    b.ToTable("Alternatives", (string)null);
                 });
 
             modelBuilder.Entity("Algorhythm.Business.Models.Exercise", b =>
@@ -52,11 +55,10 @@ namespace Algorhythm.Data.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<string>("Explanation")
-                        .IsRequired()
                         .HasColumnType("varchar(300)");
 
-                    b.Property<Guid>("ModuleId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<int>("ModuleId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Question")
                         .IsRequired()
@@ -66,14 +68,16 @@ namespace Algorhythm.Data.Migrations
 
                     b.HasIndex("ModuleId");
 
-                    b.ToTable("Exercises");
+                    b.ToTable("Exercises", (string)null);
                 });
 
             modelBuilder.Entity("Algorhythm.Business.Models.Module", b =>
                 {
-                    b.Property<Guid>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Level")
                         .HasColumnType("int");
@@ -84,7 +88,7 @@ namespace Algorhythm.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Modules");
+                    b.ToTable("Modules", (string)null);
                 });
 
             modelBuilder.Entity("Algorhythm.Business.Models.User", b =>
@@ -109,7 +113,7 @@ namespace Algorhythm.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("ExerciseUser", b =>

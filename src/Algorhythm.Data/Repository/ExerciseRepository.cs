@@ -18,7 +18,7 @@ namespace Algorhythm.Data.Repository
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
-        public async Task<IEnumerable<Exercise>> GetExercisesByModule(Guid moduleId)
+        public async Task<IEnumerable<Exercise>> GetExercisesByModule(int moduleId)
         {
             return await Search(e => e.ModuleId == moduleId);
         }

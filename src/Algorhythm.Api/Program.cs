@@ -40,19 +40,21 @@ if (app.Environment.IsDevelopment())
     app.UseDeveloperExceptionPage();
 }
 
-app.UseAuthentication();
-
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
-app.UseAuthorization();
 
 app.UseCors(c =>
 {
     c.AllowAnyOrigin();
     c.AllowAnyHeader();
+    c.AllowAnyMethod();
 });
+
+
+app.UseAuthentication();
+
+app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {

@@ -8,6 +8,6 @@ namespace Algorhythm.Business.Interfaces
     public interface IExerciseRepository : IRepository<Exercise>
     {
         Task<Exercise> GetExerciseAndAlternatives(Guid id);
-        Task<IEnumerable<Exercise>> GetExercisesByModule(Guid moduleId);
+        Task<IEnumerable<Exercise>> GetExercisesByModule(int moduleId);
     }
 }
