@@ -1,0 +1,69 @@
+<div class="container main-container">
+
+    <form novalidate (ngSubmit)="updateExercise()" [formGroup]="updateForm" >
+
+        <h4>Atualizar</h4>
+        <hr>
+
+        <input type="hidden" id="id" name="id" formControlName="id" value="">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Módulo</label>
+            <div class="col-md-10">
+                <select class="form-control" id="module" formControlName="moduleId" [ngClass]="{'is-invalid': displayMessage.moduleId}">
+                    <option [ngValue]="null" disabled>Selecione um módulo</option>
+                    <option *ngFor="let module of modules" [ngValue]="module.id">{{ module.title }}</option>
+                </select>
+                <span class="text-danger" *ngIf="displayMessage.moduleId">
+                  <p [innerHTML]="displayMessage.moduleId"></p>
+              </span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">Enunciado</label>
+            <div class="col-md-10">
+                <textarea class="form-control" placeholder="Enunciado do exercício (obrigatório)" formControlName="question" [ngClass]="{'is-invalid': displayMessage.question }">
+                </textarea>
+                <span class="text-danger" *ngIf="displayMessage.question">
+                  <p [innerHTML]="displayMessage.question"></p>
+              </span>
+            </div>
+        </div>
+        <div class="form-group">
+          <label class="col-md-2 control-label">Alternativas</label>
+          <div class="col-md-6">
+              <div class="form control input-group-append">
+                <input [(ngModel)]="newAlternative" [ngModelOptions]="{standalone: true}" type="text" class="form-control"/>
+                <button type="button" class="btn btn-primary " (click)="addAlternative(newAlternative)">Add</button>
+              </div>
+              <br>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let alternative of exercise.alternatives">{{alternative}}
+                    <button type="button" class="badge badge-danger" (click)="removeAlternative(alternative)">remover</button></li>
+                </ul>
+          </div>
+      </div>
+
+        <div class="form-group">
+          <label class="col-md-3 control-label">Alternativa correta</label>
+          <div class="col-md-10">
+            <select class="form-control" formControlName="correctAlternative" [ngClass]="{'is-invalid': displayMessage.correctAlternative }">
+              <option [ngValue]="null" disabled>Selecione uma palavra</option>
+              <option *ngFor="let alternative of exercise.alternatives" [ngValue]="alternative">{{ alternative }}</option>
+          </select>
+          <span class="text-danger" *ngIf="displayMessage.correctAlternative">
+            <p [innerHTML]="displayMessage.correctAlternative"></p>
+        </span>
+          </div>
+      </div>
+
+      
+      <div class="form-group">
+        <div class="col-md-4 col-md-offset-2">
+            <span><button class="btn btn-success" id="Update" [disabled]="!updateForm.valid" type="submit">Atualizar</button></span>&nbsp;
+            <a class="btn btn-info" [routerLink]="['/exercise/list']">Voltar</a>
+        </div>
+    </div>
+    </form>
+</div>

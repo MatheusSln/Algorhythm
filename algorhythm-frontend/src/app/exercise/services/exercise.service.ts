@@ -20,9 +20,25 @@ export class ExerciseService extends BaseService{
         return response;
     }
 
+    updateExercise(exercise: Exercise): Observable<Exercise> {
+        let response = this.http
+            .put(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
+            .pipe(
+                map(this.extractData),
+                catchError(this.serviceError));
+
+        return response;
+    }
+
     getAll(): Observable<Exercise[]> {
         return this.http
-            .get<Exercise[]>(this.UrlServiceV1 + "exercises")
+            .get<Exercise[]>(this.UrlServiceV1 + "exercises", this.GetHeaderJson())
+            .pipe(catchError(super.serviceError));
+    }
+    
+    getById(id: string): Observable<Exercise> {
+        return this.http
+            .get<Exercise>(this.UrlServiceV1 + "exercises/" + id)
             .pipe(catchError(super.serviceError));
     }    
 }

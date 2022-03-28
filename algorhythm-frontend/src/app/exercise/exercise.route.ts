@@ -4,6 +4,8 @@ import { CreateComponent } from "./create/create.component";
 import { DeleteComponent } from "./delete/delete.component";
 import { ExerciseAppComponent } from "./exercise.app.component";
 import { ListComponent } from "./list/list.component";
+import { ExerciseResolve } from "./services/exercise.resolve";
+import { UpdateComponent } from "./update/update.component";
 
 const exerciseRouterConfig: Routes =  [
     {
@@ -11,7 +13,8 @@ const exerciseRouterConfig: Routes =  [
         children:[
             {path: 'create', component: CreateComponent},
             {path: 'list', component: ListComponent},
-            {path: 'delete', component: DeleteComponent}
+            {path: 'delete/:id', component: DeleteComponent},
+            {path: 'update/:id', component: UpdateComponent, resolve: { exercise: ExerciseResolve}}
         ]
     }
 ]

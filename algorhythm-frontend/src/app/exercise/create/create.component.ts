@@ -82,7 +82,6 @@ export class CreateComponent implements OnInit, AfterViewInit {
     merge(...controlBlurs).subscribe(() => {
       this.displayMessage = this.genericValidator.processMessages(this.createForm);
       this.notSavedChanges = true;
-      console.log(this.displayMessage)
     });
   }
 

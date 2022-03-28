@@ -1,4 +1,3 @@
-import { EnumType } from "typescript";
 
 export class Exercise{
   id: string;

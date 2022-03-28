@@ -11,7 +11,7 @@ export class ListComponent implements OnInit {
   public exercises: Exercise[];
   errorMessage: string;
 
-  constructor(private exerciseService: ExerciseService) {   console.log(this.exercises) }
+  constructor(private exerciseService: ExerciseService) { }
 
   ngOnInit(): void {
     this.exerciseService.getAll()

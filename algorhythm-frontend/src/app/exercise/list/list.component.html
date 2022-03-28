@@ -27,10 +27,10 @@
                 {{exercise.alternatives }}
             </td>
             <td class="text-right">
-                <a class="btn btn-warning" [routerLink]="['/exercise/editar',exercise.id]">
-                    <span class="fa fa-pencil-alt"></span>
+                <a class="btn btn-warning" [routerLink]="['/exercise/update',exercise.id]">
+                    <span class="fa fa-pencil"></span>
                 </a>&nbsp;
-                <a class="btn btn-danger" [routerLink]="['/exercise/excluir',exercise.id]">
+                <a class="btn btn-danger" [routerLink]="['/exercise/delete',exercise.id]">
                     <span class="fa fa-trash"></span>
                 </a>
             </td>

@@ -36,9 +36,9 @@ namespace Algorhythm.Api.Controllers
         }
 
         [HttpGet("{id:guid}")]
-        public async Task<ActionResult<ExerciseDto>> GetbyId([FromQuery] Guid id)
+        public async Task<ActionResult<ExerciseDto>> GetbyId([FromRoute] Guid id)
         {
-            var exercise = _mapper.Map<ExerciseDto>(await _exerciseRepository.GetById(id));
+            var exercise = _mapper.Map<ExerciseDto>(await _exerciseRepository.GetExerciseAndAlternatives(id));
 
             if (exercise is null) 
                 return NotFound();
@@ -61,18 +61,15 @@ namespace Algorhythm.Api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<ExerciseDto>> Update(string id, ExerciseDto exerciseDto)
+        public async Task<ActionResult<ExerciseDto>> Update(ExerciseDto exerciseDto)
         {
-            if (id != exerciseDto.Id)
-            {
-                NotifyError("O id informado não é o mesmo passado na query");
-                return CustomResponse(exerciseDto);
-            }
 
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
 
             var exercise = _mapper.Map<Exercise>(exerciseDto);
+
+            exercise.Alternatives = exerciseDto.Alternatives.Select(s => new Alternative { ExerciseId = exercise.Id, Title = s });
             await _exerciseService.Update(exercise);
 
             return CustomResponse(exerciseDto);

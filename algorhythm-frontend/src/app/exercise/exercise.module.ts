@@ -10,14 +10,17 @@ import { DeleteComponent } from "./delete/delete.component";
 import { ExerciseAppComponent } from "./exercise.app.component";
 import { ExerciseRoutingModule } from "./exercise.route";
 import { ListComponent } from "./list/list.component";
+import { ExerciseResolve } from "./services/exercise.resolve";
 import { ExerciseService } from "./services/exercise.service";
+import { UpdateComponent } from "./update/update.component";
 
 @NgModule({
     declarations: [
       ExerciseAppComponent,
       CreateComponent,
       ListComponent,
-      DeleteComponent
+      DeleteComponent,
+      UpdateComponent
     ],
     imports: [
         CommonModule,
@@ -28,7 +31,8 @@ import { ExerciseService } from "./services/exercise.service";
         CustomFormsModule
     ],
     providers: [
-      ExerciseService
+      ExerciseService,
+      ExerciseResolve
     ]
   })
   export class ExerciseModule { }
