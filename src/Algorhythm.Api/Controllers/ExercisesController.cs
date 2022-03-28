@@ -69,9 +69,6 @@ namespace Algorhythm.Api.Controllers
 
             var exercise = _mapper.Map<Exercise>(exerciseDto);
 
-            exercise.Alternatives = exerciseDto.Alternatives.Select(s => new Alternative { ExerciseId = exercise.Id, Title = s });
-            await _exerciseService.Update(exercise);
-
             return CustomResponse(exerciseDto);
         }
 
