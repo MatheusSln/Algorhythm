@@ -1,10 +1,12 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomValidators } from 'ngx-custom-validators';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/utils/generic-form-validation';
+import { Alternative } from '../models/alternative';
 import { Exercise } from '../models/exercise';
 import { ExerciseService } from '../services/exercise.service';
 
@@ -17,7 +19,7 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
   
     updateForm: FormGroup;
-  
+    updateAlternativeForm: FormGroup;
     notSavedChanges: boolean;
   
     modules = [
@@ -32,9 +34,10 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     ]
   
     errors: any[] = [];
+    errorsAlternative: any[] = [];
   
     exercise: Exercise = new Exercise();
-  
+    alternative: Alternative = new Alternative();
     displayMessage: DisplayMessage = {};
   
     newAlternative: string;
@@ -42,7 +45,12 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     validationMessage: ValidationMessages;
     correctAlternative: string = "";
   
-    constructor(private fb: FormBuilder, private toastr: ToastrService, private router: Router, private route: ActivatedRoute,private exerciseService: ExerciseService) {
+    constructor(private fb: FormBuilder,
+                private toastr: ToastrService,
+                private router: Router, 
+                private route: ActivatedRoute,
+                private exerciseService: ExerciseService,
+                private modalService: NgbModal) {
       this.validationMessage = {
         moduleId: {
           required: 'Informe o modulo'
@@ -67,6 +75,12 @@ export class UpdateComponent implements OnInit, AfterViewInit {
         question: ['', [Validators.required, CustomValidators.rangeLength([10, 300])]],
         correctAlternative: ['', [Validators.required]]
       });
+
+      this.updateAlternativeForm = this.fb.group({
+        id: '',
+        exerciseId:'',
+        title: ''
+      })
 
       this.fillForm();
     }
@@ -103,11 +117,12 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     updateExercise() {
       if (this.updateForm.dirty && this.updateForm.valid) {
         this.exercise = Object.assign({}, this.exercise, this.updateForm.value);
+        this.exercise.alternatives = null;
         this.exercise.level = this.exercise.moduleId
   
         this.exerciseService.updateExercise(this.exercise)
           .subscribe(
-            success => { this.proccessSuccess() },
+            () => { this.proccessSuccess() },
             fail => { this.proccessFail(fail) }
           );
   
@@ -115,15 +130,47 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       }
     }
 
+    updateAlternative(){
+      if (this.updateAlternativeForm.dirty && this.updateAlternativeForm.valid) {
+        this.alternative = Object.assign({}, this.alternative, this.updateAlternativeForm.value);
+  
+        this.exerciseService.updateAlternative(this.alternative)
+          .subscribe(
+            () => { this.proccessSuccessAlternative(this.alternative) },
+            fail => { this.proccessFailAlternative(fail) }
+          );
+  
+        this.notSavedChanges = false;
+      }
+    }
+
+
     fillForm(){
         this.updateForm.patchValue({
             id: this.exercise.id,
             question: this.exercise.question,
             moduleId: this.modules.find((element) => element.id == this.exercise.moduleId.toString()).id,
-            correctAlternative: this.exercise.correctAlternative
+            correctAlternative: this.exercise.correctAlternative,
+            alternativesUpdate: this.exercise.alternativesUpdate
         })
     }
+
+    fillAlternativeForm(alternative: Alternative){
+      this.updateAlternativeForm.patchValue({
+        id: alternative.id,
+        title: alternative.title,
+        exerciseId: this.exercise.id
+      })
+    }
   
+    proccessSuccessAlternative(alternative: Alternative){
+      this.errors = [];
+
+      this.toastr.success('Exercício atualizado com sucesso!', 'Sucesso!');
+      this.modalService.dismissAll();
+      this.exercise.alternativesUpdate.find((element) => element.id == alternative.id).title = alternative.title;
+    }
+
     proccessSuccess() {
       this.updateForm.reset();
       this.errors = [];
@@ -136,5 +183,14 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     proccessFail(fail: any) {
       this.errors = fail.error.errors;
       this.toastr.error('Ocorreu um erro!', 'Opa :(');
+    }
+
+    proccessFailAlternative(fail: any) {
+      this.errorsAlternative = fail.error.errors;
+      this.toastr.error('Ocorreu um erro!', 'Opa :(');
+    }
+
+    openModal(content){
+      this.modalService.open(content);
     }
   }

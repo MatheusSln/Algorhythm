@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs/internal/Observable";
 import { catchError, map } from "rxjs/operators";
 import { BaseService } from "src/app/services/base.service";
+import { Alternative } from "../models/alternative";
 import { Exercise } from "../models/exercise";
 
 @Injectable()
@@ -23,6 +24,16 @@ export class ExerciseService extends BaseService{
     updateExercise(exercise: Exercise): Observable<Exercise> {
         let response = this.http
             .put(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
+            .pipe(
+                map(this.extractData),
+                catchError(this.serviceError));
+
+        return response;
+    }
+
+    updateAlternative(alternative: Alternative): Observable<Alternative> {
+        let response = this.http
+            .put(this.UrlServiceV1 + 'exercises/alternative', alternative, this.GetHeaderJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));

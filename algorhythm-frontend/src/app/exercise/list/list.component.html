@@ -24,7 +24,7 @@
                 {{ exercise.question }}
             </td>
             <td>
-                {{exercise.alternatives }}
+                {{exercise.alternatives.join(", ") }}
             </td>
             <td class="text-right">
                 <a class="btn btn-warning" [routerLink]="['/exercise/update',exercise.id]">

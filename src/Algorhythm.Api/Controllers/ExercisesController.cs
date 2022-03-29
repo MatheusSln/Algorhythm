@@ -16,17 +16,23 @@ namespace Algorhythm.Api.Controllers
     {
         private readonly IExerciseRepository _exerciseRepository;
         private readonly IExerciseService _exerciseService;
+        private readonly IAlternativeService _alternativeService;
+        private readonly IAlternativeRepository _alternativeRepository;
         private readonly IMapper _mapper;
 
         public ExercisesController(IExerciseRepository exerciseRepository,
                                    IMapper mapper,
                                    IExerciseService exerciseService,
-                                   INotifier notifier) :
+                                   INotifier notifier,
+                                   IAlternativeService alternativeService,
+                                   IAlternativeRepository alternativeRepository) :
             base(notifier)
         {
             _exerciseRepository = exerciseRepository;
             _mapper = mapper;
             _exerciseService = exerciseService;
+            _alternativeService = alternativeService;
+            _alternativeRepository = alternativeRepository;
         }
 
         [HttpGet]
@@ -42,6 +48,8 @@ namespace Algorhythm.Api.Controllers
 
             if (exercise is null) 
                 return NotFound();
+
+            exercise.AlternativesUpdate = _mapper.Map<IEnumerable<AlternativeDto>>(await _alternativeRepository.GetAlternativesByExercise(id)).ToList();
 
             return exercise;
         }
@@ -68,8 +76,23 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse(ModelState);
 
             var exercise = _mapper.Map<Exercise>(exerciseDto);
+            await _exerciseService.Update(exercise);
 
             return CustomResponse(exerciseDto);
+        }
+
+        [Route("alternative")]
+        [HttpPut]
+        public async Task<ActionResult<AlternativeDto>> UpdateAlternative(AlternativeDto alternativeDto)
+        {
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            var alternative = new Alternative {  Id = alternativeDto.Id, ExerciseId = alternativeDto.ExerciseId, Title =  alternativeDto.Title };
+
+            await _alternativeService.Update(alternative);
+
+            return CustomResponse(alternativeDto);
         }
 
         [HttpDelete("id:guid")]

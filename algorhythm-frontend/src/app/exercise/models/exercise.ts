@@ -1,3 +1,4 @@
+import { Alternative } from "./alternative";
 
 export class Exercise{
   id: string;
@@ -6,4 +7,5 @@ export class Exercise{
   level: number;
   alternatives: string[];
   correctAlternative: string;
+  alternativesUpdate: Alternative[]
 }
