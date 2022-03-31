@@ -7,5 +7,6 @@ export class Exercise{
   level: number;
   alternatives: string[];
   correctAlternative: string;
-  alternativesUpdate: Alternative[]
+  alternativesUpdate: Alternative[];
+  deletedAt: string;
 }

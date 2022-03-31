@@ -52,6 +52,9 @@ namespace Algorhythm.Data.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(100)");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Explanation")
                         .HasColumnType("varchar(300)");
 

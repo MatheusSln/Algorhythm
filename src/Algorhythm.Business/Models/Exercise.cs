@@ -13,6 +13,8 @@ namespace Algorhythm.Business.Models
 
         public string Explanation { get; set; }
 
+        public DateTime? DeletedAt { get; set; }
+
         // EF Relations
         public Module Module { get; set; }
 

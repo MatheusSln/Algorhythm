@@ -42,7 +42,8 @@ export class CreateComponent implements OnInit, AfterViewInit {
     level: 0,
     alternatives: [],
     correctAlternative: "",
-    alternativesUpdate: []
+    alternativesUpdate: [],
+    deletedAt: null
   };
 
   displayMessage: DisplayMessage = {};

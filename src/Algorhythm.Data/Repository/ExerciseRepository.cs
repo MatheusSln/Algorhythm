@@ -4,6 +4,7 @@ using Algorhythm.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Algorhythm.Data.Repository
@@ -14,18 +15,18 @@ namespace Algorhythm.Data.Repository
 
         public async Task<Exercise> GetExerciseAndAlternatives(Guid id)
         {
-            return await Db.Exercises.AsNoTracking().Include(a => a.Alternatives)
+            return await Db.Exercises.AsNoTracking().Where(w  => w.DeletedAt == null).Include(a => a.Alternatives)
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task<IEnumerable<Exercise>> GetExercisesByModule(int moduleId)
         {
-            return await Search(e => e.ModuleId == moduleId);
+            return await Search(e => e.ModuleId == moduleId && e.DeletedAt == null);
         }
 
         public async Task<IEnumerable<Exercise>> GetAllExercisesAndAlternatives()
         {
-            return await Db.Exercises.AsNoTracking().Include(a => a.Alternatives)
+            return await Db.Exercises.AsNoTracking().Where(w => w.DeletedAt == null).Include(a => a.Alternatives)
                 .ToListAsync();
         }
     }
