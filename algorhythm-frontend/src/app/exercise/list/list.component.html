@@ -1,4 +1,6 @@
 <div class="container main-container">
+    
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#00b9ff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>  
 
     <h1>Lista de Exercícios</h1>
 
@@ -9,7 +11,7 @@
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr> 
-                <th>Module Id</th>
+                <th>Id do Módulo</th>
                 <th>Enunciado</th>
                 <th>Alternativas</th>
                 <th>Alternativa Correta</th>
@@ -22,10 +24,13 @@
             </td>
             <td>
                 {{ exercise.question }}
-            </td>
+            </td>          
             <td>
                 {{exercise.alternatives.join(", ") }}
             </td>
+            <td>
+                {{ exercise.correctAlternative }}
+            </td>              
             <td class="text-right">
                 <a class="btn btn-warning" [routerLink]="['/exercise/update',exercise.id]">
                     <span class="fa fa-pencil"></span>

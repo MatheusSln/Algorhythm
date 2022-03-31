@@ -7,11 +7,11 @@ import { Alternative } from "../models/alternative";
 import { Exercise } from "../models/exercise";
 
 @Injectable()
-export class ExerciseService extends BaseService{
+export class ExerciseService extends BaseService {
 
-    constructor (private http: HttpClient){ super(); }
+    constructor(private http: HttpClient) { super(); }
 
-    createExercise(exercise: Exercise) : Observable<Exercise> {
+    createExercise(exercise: Exercise): Observable<Exercise> {
         let response = this.http
             .post(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
             .pipe(
@@ -31,6 +31,15 @@ export class ExerciseService extends BaseService{
         return response;
     }
 
+    deleteExercise(exercise: Exercise): Observable<Exercise> {
+        let response = this.http
+            .put(this.UrlServiceV1 + 'exercises/delete', exercise, this.GetHeaderJson())
+            .pipe(
+                map(this.extractData),
+                catchError(this.serviceError));
+
+        return response;
+    }
     updateAlternative(alternative: Alternative): Observable<Alternative> {
         let response = this.http
             .put(this.UrlServiceV1 + 'exercises/alternative', alternative, this.GetHeaderJson())
@@ -46,10 +55,10 @@ export class ExerciseService extends BaseService{
             .get<Exercise[]>(this.UrlServiceV1 + "exercises", this.GetHeaderJson())
             .pipe(catchError(super.serviceError));
     }
-    
+
     getById(id: string): Observable<Exercise> {
         return this.http
             .get<Exercise>(this.UrlServiceV1 + "exercises/" + id)
             .pipe(catchError(super.serviceError));
-    }    
+    }
 }

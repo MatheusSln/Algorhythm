@@ -95,15 +95,18 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(alternativeDto);
         }
 
-        [HttpDelete("id:guid")]
-        public async Task<ActionResult> Delete(Guid id)
+        [Route("delete")]
+        [HttpPut]
+        public async Task<ActionResult> Delete(ExerciseDto exerciseDto)
         {
-            var exercise = await _exerciseRepository.GetById(id);
+            var exercise = await _exerciseRepository.GetById(_mapper.Map<Exercise>(exerciseDto).Id);
 
             if (exercise is null)
                 return NotFound();
 
-            await _exerciseService.Remove(id);
+            exercise.DeletedAt = DateTime.Now;
+
+            await _exerciseService.Update(exercise);
 
             return CustomResponse();
         }

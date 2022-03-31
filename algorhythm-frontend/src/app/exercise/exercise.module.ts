@@ -4,6 +4,7 @@ import { NgModule } from "@angular/core";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 import { CustomFormsModule } from "ngx-custom-validators";
+import { NgxSpinner, NgxSpinnerModule } from "ngx-spinner";
 import { AccountRoutingModule } from "../account/account.route";
 import { CreateComponent } from "./create/create.component";
 import { DeleteComponent } from "./delete/delete.component";
@@ -28,7 +29,8 @@ import { UpdateComponent } from "./update/update.component";
         FormsModule,
         ReactiveFormsModule,
         HttpClientModule,
-        CustomFormsModule
+        CustomFormsModule,
+        NgxSpinnerModule
     ],
     providers: [
       ExerciseService,

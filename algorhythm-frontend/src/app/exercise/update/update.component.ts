@@ -3,6 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from '@angular/fo
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { CustomValidators } from 'ngx-custom-validators';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { fromEvent, merge, Observable } from 'rxjs';
 import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/utils/generic-form-validation';
@@ -50,7 +51,8 @@ export class UpdateComponent implements OnInit, AfterViewInit {
                 private router: Router, 
                 private route: ActivatedRoute,
                 private exerciseService: ExerciseService,
-                private modalService: NgbModal) {
+                private modalService: NgbModal,
+                private spinner: NgxSpinnerService) {
       this.validationMessage = {
         moduleId: {
           required: 'Informe o modulo'
@@ -69,6 +71,8 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     }
   
     ngOnInit(): void {
+      this.spinner.show();
+
       this.updateForm = this.fb.group({
         id: '',
         moduleId: ['', [Validators.required]],
@@ -83,6 +87,10 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       })
 
       this.fillForm();
+
+      setTimeout(()=> {
+        this.spinner.hide();
+      }, 1000);
     }
   
     ngAfterViewInit(): void {

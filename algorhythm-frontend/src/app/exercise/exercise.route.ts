@@ -13,7 +13,7 @@ const exerciseRouterConfig: Routes =  [
         children:[
             {path: 'create', component: CreateComponent},
             {path: 'list', component: ListComponent},
-            {path: 'delete/:id', component: DeleteComponent},
+            {path: 'delete/:id', component: DeleteComponent, resolve:{ exercise: ExerciseResolve}},
             {path: 'update/:id', component: UpdateComponent, resolve: { exercise: ExerciseResolve}}
         ]
     }

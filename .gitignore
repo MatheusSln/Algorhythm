@@ -17,7 +17,7 @@
 mono_crash.*
 
 # Package-lock
-*.package-lock.json
+package-lock.json
 
 # Build results
 [Dd]ebug/
