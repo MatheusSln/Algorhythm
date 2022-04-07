@@ -14,6 +14,8 @@ namespace Algorhythm.Business.Models
 
         public Level Level { get; set; }
 
+        public DateTime? BlockedAt { get; set; }
+
         public List<Exercise> Exercises { get; set; }
     }
 }

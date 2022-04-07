@@ -87,6 +87,14 @@ namespace Algorhythm.Api.Controllers
 
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
+            var user = await _userRepository.GetUserAndExercisesByEmail(loginUser.Email);
+
+            if (user.BlockedAt.HasValue)
+            {
+                NotifyError("Usuário bloqueado por tempo indefinido.");
+                return CustomResponse(loginUser);
+            }
+
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
 
             if (result.Succeeded)

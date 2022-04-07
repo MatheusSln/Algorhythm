@@ -39,4 +39,10 @@ export class AccountService extends BaseService{
 
     return response;  
     }
+
+    getAll() : Observable<User[]>{
+        return this.http
+        .get<User[]>(this.UrlServiceV1 + "user", this.GetHeaderJson())
+        .pipe(catchError(super.serviceError));
+    }
 }

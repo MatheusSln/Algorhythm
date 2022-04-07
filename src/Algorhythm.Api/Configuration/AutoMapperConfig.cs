@@ -1,4 +1,5 @@
 ﻿using Algorhythm.Api.Dtos;
+using Algorhythm.Api.Dtos.User;
 using Algorhythm.Business.Models;
 using AutoMapper;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace Algorhythm.Api.Configuration
             CreateMap<ExerciseDto, Exercise>().ForMember(s => s.Alternatives, opt => opt.MapFrom(s => s.Alternatives.Select(x => new Alternative { Title = x}).ToList()));
             CreateMap<Alternative, AlternativeDto>().ReverseMap();
             CreateMap<User, RegisterUserDto>().ReverseMap();
+            CreateMap<User, UpdateUserDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
         }
     }
 }

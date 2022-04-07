@@ -1,4 +1,5 @@
 ﻿using Algorhythm.Api.Dtos;
+using Algorhythm.Api.Dtos.User;
 using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
 using AutoMapper;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -40,10 +42,16 @@ namespace Algorhythm.Api.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        public async Task<IEnumerable<UserDto>> GetAll()
+        {
+            return _mapper.Map<IEnumerable<UserDto>>(await _userRepository.GetAllValidUsers());
+        }
+
         [HttpPut]
         public async Task<ActionResult> UpdateUser(UpdateUserDto userDto)
         {
-            if (!ModelState.IsValid)
+            if (!ModelState.IsValid) 
                 return CustomResponse(ModelState);
             
             var user = await _userRepository.GetById(userDto.Id);

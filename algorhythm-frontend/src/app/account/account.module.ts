@@ -14,13 +14,16 @@ import { CustomFormsModule } from 'ngx-custom-validators';
 
 import { AccountGuard } from './services/account.guard';
 import { UserEditComponent } from './edit/edit.component';
+import { UserListComponent } from './list/list.component';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 @NgModule({
   declarations: [
     AccountAppComponent,
     RegisterComponent,
     LoginComponent,
-    UserEditComponent
+    UserEditComponent,
+    UserListComponent
   ],
   imports: [
     CommonModule,
@@ -29,7 +32,8 @@ import { UserEditComponent } from './edit/edit.component';
     FormsModule,
     ReactiveFormsModule,
     HttpClientModule,
-    CustomFormsModule
+    CustomFormsModule,
+    NgxSpinnerModule
   ],
   providers: [
     AccountService,

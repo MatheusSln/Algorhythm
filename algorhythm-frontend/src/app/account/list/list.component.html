@@ -1,0 +1,33 @@
+<div class="container main-container">
+    
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#00b9ff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>  
+
+    <h1>Lista de usuários</h1>
+
+    <table class="table table-hover">
+        <thead class="thead-dark">
+            <tr> 
+                <th>Nome</th>
+                <th>E-mail</th>
+                <th>Data de Nascimento</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tr *ngFor="let user of users">
+            <td>
+                {{ user.name }}
+            </td>
+            <td>
+                {{ user.email }}
+            </td>          
+            <td>
+                {{user.birthDate }}
+            </td>              
+            <td class="text-right">
+                <a class="btn btn-warning" [routerLink]="['/account/update',user.id]">
+                    <span class="fa fa-pencil"></span>
+                </a>
+            </td>
+        </tr>
+    </table>
+</div>
