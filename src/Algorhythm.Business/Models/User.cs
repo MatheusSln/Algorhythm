@@ -1,4 +1,5 @@
 ﻿using Algorhythm.Business.Enum;
+using System;
 using System.Collections.Generic;
 
 namespace Algorhythm.Business.Models
@@ -9,7 +10,7 @@ namespace Algorhythm.Business.Models
 
         public string Email { get; set; }
 
-        public int Age { get; set; }
+        public DateTime BirthDate { get; set; }
 
         public Level Level { get; set; }
 

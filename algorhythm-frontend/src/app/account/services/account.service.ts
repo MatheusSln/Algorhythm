@@ -29,4 +29,14 @@ export class AccountService extends BaseService{
 
         return response;        
     }
+
+    updateUser(user: User) : Observable<User>{
+        let response = this.http
+        .put(this.UrlServiceV1 + 'user', user, this.GetHeaderJson())
+        .pipe(
+            map(this.extractData),
+            catchError(this.serviceError));
+
+    return response;  
+    }
 }

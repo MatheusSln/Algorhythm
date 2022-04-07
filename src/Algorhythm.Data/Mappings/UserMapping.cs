@@ -18,7 +18,7 @@ namespace Algorhythm.Data.Mappings
                 .IsRequired()
                 .HasColumnType("varchar(250)");
 
-            builder.Property(m => m.Age)
+            builder.Property(m => m.BirthDate)
                 .IsRequired();
 
             builder.ToTable("Users");

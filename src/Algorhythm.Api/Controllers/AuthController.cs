@@ -67,6 +67,7 @@ namespace Algorhythm.Api.Controllers
            
             if (result.Succeeded)
             {
+                registerUser.Level = Business.Enum.Level.Introduction;
                 await _userService.Add(_mapper.Map<User>(registerUser));
 
                 await _signInManager.SignInAsync(identityUser, false);
@@ -143,9 +144,11 @@ namespace Algorhythm.Api.Controllers
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
                 UserToken = new UserTokenDto
                 {
-                    Id = aspNetUser.Id,
+                    Id = user.Id.ToString(),
+                    AspNetId = aspNetUser.Id,
                     Email = aspNetUser.Email,
                     Name = user.Name,
+                    BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
                     Claims = claims.Select(c => new ClaimDto { Type = c.Type, Value = c.Value })
                 }
             };

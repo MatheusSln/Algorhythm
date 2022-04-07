@@ -40,8 +40,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
                     required: 'Informe seu nome',
                     rangeLength: 'O nome precisa ter no mínimo 2 caracteres'
                   },
-                  age: {
-                    required: 'Informe sua idade',
+                  birthDate: {
+                    required: 'Informe sua data de nascimento',
                   },
                   password: {
                     required: 'Informe a senha',
@@ -64,10 +64,10 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['',[Validators.required, CustomValidators.rangeLength([2, 150])]],
-      age: ['', [Validators.required]],
+      birthDate: ['', [Validators.required]],
       password: passw,
       confirmPassword: passwConfirm
-    });
+    }); 
   }
 
   ngAfterViewInit(): void {

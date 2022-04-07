@@ -13,12 +13,14 @@ import { AccountService } from './services/account.service';
 import { CustomFormsModule } from 'ngx-custom-validators';
 
 import { AccountGuard } from './services/account.guard';
+import { UserEditComponent } from './edit/edit.component';
 
 @NgModule({
   declarations: [
     AccountAppComponent,
     RegisterComponent,
-    LoginComponent
+    LoginComponent,
+    UserEditComponent
   ],
   imports: [
     CommonModule,

@@ -1,9 +1,9 @@
 <div class="container main-container">
-    <h1>Cadastro</h1>
+    <h1>Configurações</h1>
 
-    <form novalidate (ngSubmit)="addAccount()" [formGroup]="registerForm">
+    <form novalidate (ngSubmit)="updateAccount()" [formGroup]="editForm">
 
-        <h4>Crie sua conta</h4>
+        <h4>Ajuste sua conta</h4>
         <hr>
 
         <div class="alert alert-danger" *ngIf="errors.length > 0">
@@ -41,32 +41,25 @@
                                 <p [innerHTML]="displayMessage.birthDate"></p>
                             </span>
             </div>
-        </div>         
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">Senha</label>
-            <div class="col-md-10">
-                <input class="form-control" id="password" type="password" placeholder="Senha (obrigatório)" formControlName="password" [ngClass]="{'is-invalid': displayMessage.password }" />
-                <span class="text-danger" *ngIf="displayMessage.password">
-                                <p [innerHTML]="displayMessage.password"></p>
-                            </span>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label class="col-md-2 control-label">Confirme a Senha</label>
-            <div class="col-md-10">
-                <input class="form-control" id="confirmPassword" type="password" placeholder="Confirme a Senha (obrigatório)" formControlName="confirmPassword" [ngClass]="{'is-invalid': displayMessage.confirmPassword }" />
-                <span class="text-danger" *ngIf="displayMessage.confirmPassword">
-                                <p [innerHTML]="displayMessage.confirmPassword"></p>
-                            </span>
-            </div>
         </div>
 
         <div class="form-group">
             <div class="col-md-4 col-md-offset-2">
-                <span><button class="btn btn-success" id="Registrar" [disabled]="!registerForm.valid" type="submit">Registrar</button></span>
+                <span><button class="btn btn-info" id="Registrar" [disabled]="!editForm.valid" type="submit">Editar</button></span>&nbsp;
+                <span><a class="btn btn-warning" id="editPass"  (click)="openModal(content)">Editar senha</a></span>&nbsp;
+                <span><a class="btn btn-success" id="editPass"  [routerLink]="['/home']" >Voltar</a></span>
             </div>
         </div>
     </form>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Editar senha</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+        <p>Para editar sua senha clique no botão abaixo para receber um e-mail com as instruções</p>
+        <button type="button" class="btn btn-info" (click)="sendMailPassword()">RECEBER E-MAIL</button>
+    </ng-template>
 </div>

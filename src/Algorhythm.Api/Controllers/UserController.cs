@@ -1,7 +1,6 @@
 ﻿using Algorhythm.Api.Dtos;
 using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
-using Algorhythm.Business.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,6 +23,7 @@ namespace Algorhythm.Api.Controllers
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly AppSettings _appSettings;
+
         public UserController(INotifier notifier,
                               SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
@@ -41,35 +41,44 @@ namespace Algorhythm.Api.Controllers
         }
 
         [HttpPut]
-        private async Task<ActionResult> UpdateUser(RegisterUserDto userDto)
+        public async Task<ActionResult> UpdateUser(UpdateUserDto userDto)
         {
             if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
             
-            var identityUser = new IdentityUser
+            var user = await _userRepository.GetById(userDto.Id);
+
+            if (user == null)
+                return NotFound();
+
+            if (!user.Email.Equals(userDto.Email))
             {
-                UserName = userDto.Email,
-                Email = userDto.Email,
-                EmailConfirmed = true
-            };
-            var token = await _userManager.GenerateChangeEmailTokenAsync(identityUser, userDto.Email);
+                var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
-            var result = await _userManager.ChangeEmailAsync(identityUser,userDto.Email, token);
+                var token = await _userManager.GenerateChangeEmailTokenAsync(identityUser, userDto.Email);
 
-            if (result.Succeeded)
-            {
-                await _userService.Update(_mapper.Map<User>(userDto));
+                var result = await _userManager.ChangeEmailAsync(identityUser, userDto.Email, token);
 
-                return CustomResponse(await GerarJwt(userDto.Email));
+                if (!result.Succeeded)
+                {
+                    foreach (var erro in result.Errors)
+                    {
+                        NotifyError(erro.Description);
+                    }
+
+                    return CustomResponse(userDto);
+                }
             }
 
-            foreach (var erro in result.Errors)
-            {
-                NotifyError(erro.Description);
-            }
+            user.Name = userDto.Name;
+            user.Email = userDto.Email;
+            user.BirthDate = userDto.BirthDate;
 
-            return CustomResponse(userDto);
+            await _userService.Update(user);
+
+            return CustomResponse(await GerarJwt(userDto.Email));
         }
+
         private async Task<LoginResponseDto> GerarJwt(string email)
         {
             var aspNetUser = await _userManager.FindByEmailAsync(email);
@@ -112,9 +121,11 @@ namespace Algorhythm.Api.Controllers
                 ExpiresIn = TimeSpan.FromHours(_appSettings.ExpirationHours).TotalSeconds,
                 UserToken = new UserTokenDto
                 {
-                    Id = aspNetUser.Id,
+                    Id = user.Id.ToString(),
+                    AspNetId = aspNetUser.Id,
                     Email = aspNetUser.Email,
                     Name = user.Name,
+                    BirthDate = user.BirthDate.ToString("yyyy-MM-dd"),
                     Claims = claims.Select(c => new ClaimDto { Type = c.Type, Value = c.Value })
                 }
             };
