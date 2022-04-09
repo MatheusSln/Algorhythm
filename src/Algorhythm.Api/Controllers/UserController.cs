@@ -138,7 +138,7 @@ namespace Algorhythm.Api.Controllers
 
             var user = await _userRepository.GetUserAndExercisesByEmail(email);
 
-            claims.Add(new Claim("level", user.Level.ToString()));
+            claims.Add(new Claim("level", ((int)user.Level).ToString()));
 
             var identityClaims = new ClaimsIdentity();
             identityClaims.AddClaims(claims);

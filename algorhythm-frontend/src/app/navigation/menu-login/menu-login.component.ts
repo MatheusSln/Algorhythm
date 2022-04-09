@@ -30,6 +30,7 @@ export class MenuLoginComponent {
 
   logout() { 
     this.localStorageUtils.cleanLocalDataUser();
+    window.location.reload();
     this.router.navigate(['/home']);
   }
 }
