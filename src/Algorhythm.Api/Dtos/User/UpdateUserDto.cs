@@ -25,5 +25,7 @@ namespace Algorhythm.Api.Dtos
         public string ConfirmPassword { get; set; }
 
         public Level Level { get; set; }
+
+        public DateTime? BlockedAt { get; set; }
     }
 }

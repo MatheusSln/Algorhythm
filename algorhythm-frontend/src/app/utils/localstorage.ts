@@ -5,8 +5,13 @@ export class LocalStorageUtils {
     }
 
     public saveLocalDataUser(response: any) {
-        this.saveTokenUser(response.accessToken);
-        this.saveUser(response.userToken);
+        if (response != undefined){
+            this.saveTokenUser(response.accessToken);
+            this.saveUser(response.userToken);
+        }else{
+            this.cleanLocalDataUser();
+        }
+
     }
 
     public cleanLocalDataUser() {

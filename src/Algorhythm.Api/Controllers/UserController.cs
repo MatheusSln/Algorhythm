@@ -45,7 +45,40 @@ namespace Algorhythm.Api.Controllers
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetAll()
         {
-            return _mapper.Map<IEnumerable<UserDto>>(await _userRepository.GetAllValidUsers());
+            var users = _mapper.Map<IEnumerable<UserDto>>(await _userRepository.GetAllValidUsers());
+
+            return users;
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<UserDto>> GetById([FromRoute] Guid id)
+        {
+            var user = _mapper.Map<UserDto>(await _userRepository.GetById(id));
+
+            if (user is null)
+                return NotFound();
+
+            user.Birth = user.BirthDate.ToString("yyyy-MM-dd");
+
+            return user;
+        }
+
+        [HttpPut("block")]
+        public async Task<ActionResult> BlockUser(UpdateUserDto userDto)
+        {
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            var user = await _userRepository.GetById(userDto.Id);
+
+            if (user == null)
+                return NotFound();
+
+            user.BlockedAt = DateTime.Now;
+
+            await _userService.Update(user);
+
+            return CustomResponse(userDto);
         }
 
         [HttpPut]

@@ -20,9 +20,7 @@ namespace Algorhythm.Api.Dtos.User
         [Required(ErrorMessage = "O campo idade é obrigatório")]
         public DateTime BirthDate { get; set; }
 
-        public string Password { get; set; }
-
-        public string ConfirmPassword { get; set; }
+        public string Birth { get; set; }
 
         public Level Level { get; set; }
     }

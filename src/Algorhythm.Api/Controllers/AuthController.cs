@@ -89,7 +89,7 @@ namespace Algorhythm.Api.Controllers
 
             var user = await _userRepository.GetUserAndExercisesByEmail(loginUser.Email);
 
-            if (user.BlockedAt.HasValue)
+            if (user is not null && user.BlockedAt.HasValue)
             {
                 NotifyError("Usuário bloqueado por tempo indefinido.");
                 return CustomResponse(loginUser);

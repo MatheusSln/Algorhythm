@@ -16,6 +16,8 @@ import { AccountGuard } from './services/account.guard';
 import { UserEditComponent } from './edit/edit.component';
 import { UserListComponent } from './list/list.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { UserUpdateComponent } from './update/update.component';
+import { AccountResolve } from './services/account.resolve';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     RegisterComponent,
     LoginComponent,
     UserEditComponent,
-    UserListComponent
+    UserListComponent,
+    UserUpdateComponent
   ],
   imports: [
     CommonModule,
@@ -37,7 +40,8 @@ import { NgxSpinnerModule } from 'ngx-spinner';
   ],
   providers: [
     AccountService,
-    AccountGuard
+    AccountGuard,
+    AccountResolve
   ]
 })
 export class AccountModule { }
