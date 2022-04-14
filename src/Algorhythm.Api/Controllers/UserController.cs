@@ -119,6 +119,12 @@ namespace Algorhythm.Api.Controllers
 
             return CustomResponse(await GerarJwt(userDto.Email));
         }
+        [Route("confirm")]
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string token, string email)
+        {
+            return null;
+        }
 
         private async Task<LoginResponseDto> GerarJwt(string email)
         {

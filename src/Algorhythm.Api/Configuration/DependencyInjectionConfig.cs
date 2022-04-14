@@ -1,8 +1,10 @@
-﻿using Algorhythm.Business.Interfaces;
+﻿using Algorhythm.Api.Services;
+using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Notifications;
 using Algorhythm.Business.Services;
 using Algorhythm.Data.Context;
 using Algorhythm.Data.Repository;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Algorhythm.Api.Configuration
@@ -21,6 +23,8 @@ namespace Algorhythm.Api.Configuration
             services.AddScoped<IAlternativeService, AlternativeService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<INotifier, Notifier>();
+
+            services.AddTransient<IEmailSender, EmailSender>();
 
             return services;
         }

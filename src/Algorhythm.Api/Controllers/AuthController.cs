@@ -4,6 +4,7 @@ using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -24,14 +25,16 @@ namespace Algorhythm.Api.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IEmailSender _emailSender;
         private readonly AppSettings _appSettings;
         public AuthController(INotifier notifier,
                               SignInManager<IdentityUser> signInManager,
                               UserManager<IdentityUser> userManager,
                               IOptions<AppSettings> appSettings,
                               IUserRepository userRepository,
-                              IUserService userService, 
-                              IMapper mapper) :
+                              IUserService userService,
+                              IMapper mapper,
+                              IEmailSender emailSender) :
             base(notifier)
         {
             _signInManager = signInManager;
@@ -40,6 +43,7 @@ namespace Algorhythm.Api.Controllers
             _userRepository = userRepository;
             _userService = userService;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         [HttpPost("nova-conta")]
@@ -50,7 +54,7 @@ namespace Algorhythm.Api.Controllers
 
             var user  = await _userRepository.GetUserAndExercisesByEmail(registerUser.Email);
 
-            if (!(user is null))
+            if (user is not null)
             {
                 NotifyError("E-mail já vinculado a uma conta previamente cadastrada");
                 return CustomResponse(registerUser);
@@ -60,7 +64,6 @@ namespace Algorhythm.Api.Controllers
             {
                 UserName = registerUser.Email,
                 Email = registerUser.Email,
-                EmailConfirmed = true
             };
             
             var result = await _userManager.CreateAsync(identityUser, registerUser.Password);
@@ -70,8 +73,12 @@ namespace Algorhythm.Api.Controllers
                 registerUser.Level = Business.Enum.Level.Introduction;
                 await _userService.Add(_mapper.Map<User>(registerUser));
 
-                await _signInManager.SignInAsync(identityUser, false);
-                return CustomResponse(await GerarJwt(registerUser.Email));
+                var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
+                var confirmationLink = string.Format("https://localhost:5001/api/users/confirm?token={0}&email={1}", token, registerUser.Email);
+
+                await _emailSender.SendEmailAsync(registerUser.Email, "Link de Confirmação", "Clique aqui para confirmar seu e-mail: " + confirmationLink);
+
+                return CustomResponse(registerUser);
             }
             foreach (var erro in result.Errors)
             {
@@ -92,6 +99,22 @@ namespace Algorhythm.Api.Controllers
             if (user is not null && user.BlockedAt.HasValue)
             {
                 NotifyError("Usuário bloqueado por tempo indefinido.");
+                return CustomResponse(loginUser);
+            }
+
+            var identityUser = await _userManager.FindByEmailAsync(loginUser.Email);
+
+            if (identityUser is null)
+            {
+                NotifyError("Usuário não encontrado");
+                return CustomResponse(loginUser);
+            }
+
+            bool emailConfirmed = await _userManager.IsEmailConfirmedAsync(identityUser);
+
+            if (!emailConfirmed)
+            {
+                NotifyError("Você precisa confirmar seu email antes de entrar");
                 return CustomResponse(loginUser);
             }
 

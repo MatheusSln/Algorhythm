@@ -12,6 +12,10 @@ namespace Algorhythm.Api.Extensions
         /// </summary>
         public string Secret { get; set; }
 
+        public string Email { get; set; }
+
+        public string Password { get; set; }
+
         /// <summary>
         /// Tempo válido em horas do token
         /// </summary>

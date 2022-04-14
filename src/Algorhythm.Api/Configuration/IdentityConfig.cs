@@ -18,7 +18,10 @@ namespace Algorhythm.Api.Configuration
             services.AddDbContext<ApplicationDbContext>(options =>            
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>()
+            services.AddIdentity<IdentityUser, IdentityRole>(opt =>
+            {
+                opt.SignIn.RequireConfirmedEmail = true;                
+            })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddErrorDescriber<TranslateIdentityMessages>()
                 .AddDefaultTokenProviders();
