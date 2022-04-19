@@ -35,8 +35,36 @@
 
         <div class="form-group">
             <div class="col-md-4 col-md-offset-2">
-                <span><button class="btn btn-success" id="Login" [disabled]="!loginForm.valid" type="submit">Login</button></span>
+                <span><button class="btn btn-success" id="Login" [disabled]="!loginForm.valid" type="submit">Login</button></span>&nbsp;
+                <span><button class="btn btn-info" id="ForgotPassword" type="button" (click)="openModal(content)">Esqueci minha senha</button></span>
             </div>
         </div>
     </form>
+
+    <ng-template #content let-c="close" let-d="dismiss">
+        <div class="modal-header">
+            <h4 class="modal-title" id="modal-basic-title">Trocar senha</h4>
+            <button type="button" class="close" aria-label="Close" (click)="d('')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+        </div>
+        <form (ngSubmit)="sendPasswordReset()" [formGroup]="resetPasswordForm">
+            <p>Insira seu e-mail para receber instruções de troca de senha</p>
+            <div class="form-group">
+                <label class="col-md-2 control-label">E-mail</label>
+                <div class="col-md-10">
+                    <input class="form-control" id="email" type="text" placeholder="E-mail (obrigatório)" formControlName="email" [ngClass]="{'is-invalid': displayMessage.email }" />
+                    <span class="text-danger" *ngIf="displayMessage.email">
+                                    <p [innerHTML]="displayMessage.email"></p>
+                                </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-4 col-md-offset-2">
+                    <span><button class="btn btn-success" id="resetPassword" [disabled]="!resetPasswordForm.valid" type="submit">Receber e-mail</button></span>&nbsp;
+                </div>
+            </div>             
+        </form>
+    </ng-template>       
+    
 </div>

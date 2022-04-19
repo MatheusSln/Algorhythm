@@ -67,4 +67,14 @@ export class AccountService extends BaseService{
             .get<boolean>(this.UrlServiceV1 + "user/confirm?token=" + token + "&email=" + email, this.GetHeaderJson())
             .pipe(catchError(super.serviceError));
     }
+
+    sendResetPasswordEmail(email: string){
+        let response = this.http
+        .post(this.UrlServiceV1 + 'user/resetSend', "\""+email+"\"", this.GetHeaderJson())
+        .pipe(
+            map(this.extractData),
+            catchError(this.serviceError));
+
+    return response;  
+    }
 }

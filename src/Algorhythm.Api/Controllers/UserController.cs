@@ -4,6 +4,7 @@ using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -25,6 +26,7 @@ namespace Algorhythm.Api.Controllers
         private readonly IUserRepository _userRepository;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
+        private readonly IEmailSender _emailSender;
         private readonly AppSettings _appSettings;
 
         public UserController(INotifier notifier,
@@ -32,8 +34,9 @@ namespace Algorhythm.Api.Controllers
                               UserManager<IdentityUser> userManager,
                               IOptions<AppSettings> appSettings,
                               IUserRepository userRepository,
-                              IUserService userService, 
-                              IMapper mapper) :
+                              IUserService userService,
+                              IMapper mapper,
+                              IEmailSender emailSender) :
             base(notifier)
         {
             _userManager = userManager;
@@ -41,6 +44,7 @@ namespace Algorhythm.Api.Controllers
             _userRepository = userRepository;
             _userService = userService;
             _mapper = mapper;
+            _emailSender = emailSender;
         }
 
         [HttpGet]
@@ -146,6 +150,35 @@ namespace Algorhythm.Api.Controllers
             {
                 NotifyError(error.Description);
             }
+
+            return CustomResponse();
+        }
+
+        [Route("resetSend")]
+        [HttpPost()]
+        public async Task<IActionResult> SendPasswordResetEmail([FromBody] string email)
+        {
+            if (email is null)
+            {
+                NotifyError("e-mail não pode ser nulo");
+                return CustomResponse();
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user is null)
+            {
+                NotifyError("Nenhum usuário encontrado com o e-mail informado");
+                return CustomResponse();
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+
+            var urlToken = HttpUtility.UrlEncode(token);
+
+            var resetPasswordLink = string.Format("http://127.0.0.1:4200/account/reset/{0}/{1}", urlToken, user.Email);
+
+             await _emailSender.SendEmailAsync(user.Email, "Recuperação de senha", "Clique aqui para trocar sua senha: " + resetPasswordLink);
 
             return CustomResponse();
         }

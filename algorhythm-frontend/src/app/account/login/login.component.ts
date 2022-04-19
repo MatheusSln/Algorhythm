@@ -8,6 +8,7 @@ import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/ut
 import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-login',
@@ -19,6 +20,7 @@ export class LoginComponent implements OnInit {
 
   errors: any[] = [];
   loginForm: FormGroup;
+  resetPasswordForm: FormGroup;
   user: User;
 
   validationMessage: ValidationMessages;
@@ -28,7 +30,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder,
               private accountService: AccountService,
               private router: Router,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private modalService: NgbModal) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -81,8 +84,46 @@ export class LoginComponent implements OnInit {
       this.router.navigate(['/home']);
   }
 
+  proccessSuccessResetPassword(){
+    this.resetPasswordForm.reset();
+    this.errors = [];
+    this.modalService.dismissAll();
+
+    this.toastr.success('E-mail com instruções enviado com sucesso', 'Recuperação de senha');
+
+    this.router.navigate(['/home']);
+}
+
   proccessFail(fail : any){
       this.errors = fail.error.errors;
+      this.modalService.dismissAll();
       this.toastr.error('Ocorreu um erro!', 'Opa :(');
+  }
+
+  openModal(content){
+
+    this.resetPasswordForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+    });
+
+    this.modalService.open(content);
+
+    let controlBlurs: Observable<any>[] = this.formInputElements
+    .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+
+  merge(...controlBlurs).subscribe(() => {
+    this.displayMessage = this.genericValidator.processMessages(this.resetPasswordForm);
+  });
+  
+  }
+
+  sendPasswordReset(){
+    if (this.resetPasswordForm.dirty && this.resetPasswordForm.valid) {
+        this.accountService.sendResetPasswordEmail(this.resetPasswordForm.value.email)
+        .subscribe(
+          () => {this.proccessSuccessResetPassword()},
+          fail => {this.proccessFail(fail)}
+        );
+    }
   }
 }
