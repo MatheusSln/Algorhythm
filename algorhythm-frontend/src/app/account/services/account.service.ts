@@ -61,4 +61,10 @@ export class AccountService extends BaseService{
             .get<User>(this.UrlServiceV1 + "user/" + id)
             .pipe(catchError(super.serviceError));
     }
+
+    confirmEmail(token: string, email: string){
+        return this.http
+            .get<boolean>(this.UrlServiceV1 + "user/confirm?token=" + token + "&email=" + email, this.GetHeaderJson())
+            .pipe(catchError(super.serviceError));
+    }
 }

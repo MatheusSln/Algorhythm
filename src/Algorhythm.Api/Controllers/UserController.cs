@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Algorhythm.Api.Controllers
 {
@@ -119,11 +120,34 @@ namespace Algorhythm.Api.Controllers
 
             return CustomResponse(await GerarJwt(userDto.Email));
         }
+
         [Route("confirm")]
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
         {
-            return null;
+            if (token is null || email is null)
+            {
+                NotifyError("parâmetros inválidos");
+                return CustomResponse(false);
+            }
+
+            string validToken = HttpUtility.UrlDecode(token).Replace(" ", "+");
+
+            var user = await _userManager.FindByEmailAsync(email);
+
+            var result = await _userManager.ConfirmEmailAsync(user, validToken);
+
+            if (result.Succeeded)
+            {
+                return CustomResponse(true);
+            }
+
+            foreach (var error in result.Errors)
+            {
+                NotifyError(error.Description);
+            }
+
+            return CustomResponse();
         }
 
         private async Task<LoginResponseDto> GerarJwt(string email)

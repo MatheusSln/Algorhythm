@@ -8,6 +8,7 @@ import { DisplayMessage, GenericValidator, ValidationMessages } from 'src/app/ut
 import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-register',
@@ -30,7 +31,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder,
               private accountService: AccountService,
               private router: Router,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private modalService: NgbModal,) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -80,13 +82,13 @@ export class RegisterComponent implements OnInit, AfterViewInit {
     });      
   }
 
-  addAccount() {
+  addAccount(content) {
       if (this.registerForm.dirty && this.registerForm.valid) {
           this.user =  Object.assign({}, this.user, this.registerForm.value);
 
           this.accountService.registerUser(this.user)
           .subscribe(
-            success => {this.proccessSuccess(success)},
+            () => {this.proccessSuccess(content)},
             fail => {this.proccessFail(fail)}
           );
 
@@ -94,18 +96,23 @@ export class RegisterComponent implements OnInit, AfterViewInit {
       }
   }
 
-  proccessSuccess(response : any){
+  proccessSuccess(content: any){
       this.registerForm.reset();
       this.errors = [];
-      this.accountService.LocalStorage.saveLocalDataUser(response);
 
       this.toastr.success('Registro realizado com sucesso!', 'Bem vindo!');
-
-      this.router.navigate(['/home']);
+      this.openModal(content);
+      setTimeout(()=> {
+        this.router.navigate(['/home']);
+      }, 5000);      
   }
 
   proccessFail(fail : any){
       this.errors = fail.error.errors;
       this.toastr.error('Ocorreu um erro!', 'Opa :(');
+  }
+
+  openModal(content){
+    this.modalService.open(content);
   }
 }

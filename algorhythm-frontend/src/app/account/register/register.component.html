@@ -1,7 +1,7 @@
 <div class="container main-container">
     <h1>Cadastro</h1>
 
-    <form novalidate (ngSubmit)="addAccount()" [formGroup]="registerForm">
+    <form novalidate (ngSubmit)="addAccount(content)" [formGroup]="registerForm">
 
         <h4>Crie sua conta</h4>
         <hr>
@@ -68,5 +68,15 @@
                 <span><button class="btn btn-success" id="Registrar" [disabled]="!registerForm.valid" type="submit">Registrar</button></span>
             </div>
         </div>
-    </form>
+
+        <ng-template #content let-c="close" let-d="dismiss">
+            <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title">Cadastro realizado!</h4>
+                <button type="button" class="close" aria-label="Close" (click)="d('')">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+            </div>
+            <p>Agora acesse seu e-mail e siga as instruções para realizar a confirmação!</p>
+        </ng-template>           
+    </form> 
 </div>

@@ -14,6 +14,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Algorhythm.Api.Controllers
 {
@@ -72,9 +73,9 @@ namespace Algorhythm.Api.Controllers
             {
                 registerUser.Level = Business.Enum.Level.Introduction;
                 await _userService.Add(_mapper.Map<User>(registerUser));
-
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(identityUser);
-                var confirmationLink = string.Format("https://localhost:5001/api/users/confirm?token={0}&email={1}", token, registerUser.Email);
+                var tokenHtmlUrlVersion = HttpUtility.UrlEncode(token);
+                var confirmationLink = string.Format("http://127.0.0.1:4200/account/confirm/{0}/{1}", tokenHtmlUrlVersion, registerUser.Email);
 
                 await _emailSender.SendEmailAsync(registerUser.Email, "Link de Confirmação", "Clique aqui para confirmar seu e-mail: " + confirmationLink);
 

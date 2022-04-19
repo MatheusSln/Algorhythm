@@ -18,6 +18,7 @@ import { UserListComponent } from './list/list.component';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { UserUpdateComponent } from './update/update.component';
 import { AccountResolve } from './services/account.resolve';
+import { ConfirmEmailResolve } from './services/confirmEmail.resolve';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { AccountResolve } from './services/account.resolve';
   providers: [
     AccountService,
     AccountGuard,
-    AccountResolve
+    AccountResolve,
+    ConfirmEmailResolve
   ]
 })
 export class AccountModule { }
