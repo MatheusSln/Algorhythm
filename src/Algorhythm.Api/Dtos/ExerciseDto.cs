@@ -25,5 +25,8 @@ namespace Algorhythm.Api.Dtos
         public int Level { get; set; }
 
         public List<AlternativeDto> AlternativesUpdate { get; set; }
+
+        public string Explanation { get; set; } 
+
     }
 }

@@ -19,6 +19,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { UserUpdateComponent } from './update/update.component';
 import { AccountResolve } from './services/account.resolve';
 import { ConfirmEmailResolve } from './services/confirmEmail.resolve';
+import { RegisterConfirmComponent } from './registerConfirm/registerConfirm.component';
+import { PasswordChangeComponent } from './passwordChange/passwordChange.component';
+import { ChangePasswordResolve } from './services/changePassword.resolve';
 
 @NgModule({
   declarations: [
@@ -27,7 +30,9 @@ import { ConfirmEmailResolve } from './services/confirmEmail.resolve';
     LoginComponent,
     UserEditComponent,
     UserListComponent,
-    UserUpdateComponent
+    UserUpdateComponent,
+    RegisterConfirmComponent,
+    PasswordChangeComponent
   ],
   imports: [
     CommonModule,
@@ -43,7 +48,8 @@ import { ConfirmEmailResolve } from './services/confirmEmail.resolve';
     AccountService,
     AccountGuard,
     AccountResolve,
-    ConfirmEmailResolve
+    ConfirmEmailResolve,
+    ChangePasswordResolve
   ]
 })
 export class AccountModule { }

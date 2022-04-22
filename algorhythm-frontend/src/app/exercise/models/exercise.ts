@@ -8,5 +8,6 @@ export class Exercise{
   alternatives: string[];
   correctAlternative: string;
   alternativesUpdate: Alternative[];
+  explanation: string;
   deletedAt: string;
 }

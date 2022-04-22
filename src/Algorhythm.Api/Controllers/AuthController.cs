@@ -119,7 +119,7 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse(loginUser);
             }
 
-            var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
+            var result = await _signInManager.PasswordSignInAsync(identityUser, loginUser.Password, false, true);
 
             if (result.Succeeded)
                 return CustomResponse(await GerarJwt(loginUser.Email));

@@ -10,11 +10,11 @@ import { AccountService } from "../services/account.service";
 
 
 @Component({
-    selector: 'app-update',
-    templateUrl: './update.component.html'
-  })
-export class UserUpdateComponent implements OnInit{
-  @ViewChildren(FormControlName, {read: ElementRef}) formInputElements: ElementRef[];
+  selector: 'app-update',
+  templateUrl: './update.component.html'
+})
+export class UserUpdateComponent implements OnInit {
+  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
 
   updateForm: FormGroup;
 
@@ -32,95 +32,120 @@ export class UserUpdateComponent implements OnInit{
   displayMessage: DisplayMessage = {};
 
   constructor(private fb: FormBuilder,
-      private accountService: AccountService,
-      private router: Router,
-      private route: ActivatedRoute,
-      private toastr: ToastrService,
-      private modalService: NgbModal) {
-        this.validationMessage= {
-          email: {
-            required: 'Informe o e-mail',
-            email: 'Email inválido'
-          },
-          name: {
-            required: 'Informe seu nome',
-            rangeLength: 'O nome precisa ter no mínimo 2 caracteres'
-          },
-          birthDate: {
-            required: 'Informe sua data de nascimento',
-          },
-          password: {
-            required: 'Informe a senha',
-            rangeLength: 'A senha deve possuir entre 6 e 14 caracteres'
-          },                 
-          confirmPassword: {
-            required: 'Informe a senha novamente',
-            rangeLength: 'A senha deve possuir entre 6 e 14 caracteres',
-            equalTo: 'As senhas não conferem'
-          }
-        };
-        this.genericValidator = new GenericValidator(this.validationMessage);
-
-        this.user = this.route.snapshot.data['user'];
-      }    
-
-  ngOnInit(){
-
-      this.updateForm = this.fb.group({
-          email: ['', [Validators.required, Validators.email]],
-          name: ['',[Validators.required, CustomValidators.rangeLength([2, 150])]],
-          birthDate: ['', [Validators.required]]
-        }); 
-
-      if(this.user){
-          this.fillForm(this.user)
+    private accountService: AccountService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private toastr: ToastrService,
+    private modalService: NgbModal) {
+    this.validationMessage = {
+      email: {
+        required: 'Informe o e-mail',
+        email: 'Email inválido'
+      },
+      name: {
+        required: 'Informe seu nome',
+        rangeLength: 'O nome precisa ter no mínimo 2 caracteres'
+      },
+      birthDate: {
+        required: 'Informe sua data de nascimento',
+      },
+      password: {
+        required: 'Informe a senha',
+        rangeLength: 'A senha deve possuir entre 6 e 14 caracteres'
+      },
+      confirmPassword: {
+        required: 'Informe a senha novamente',
+        rangeLength: 'A senha deve possuir entre 6 e 14 caracteres',
+        equalTo: 'As senhas não conferem'
       }
+    };
+    this.genericValidator = new GenericValidator(this.validationMessage);
+
+    this.user = this.route.snapshot.data['user'];
   }
 
-  fillForm(user: any){
-      this.updateForm.patchValue({
-          name: user.name,
-          email: user.email,
-          birthDate: user.birth
-      })
-  }
+  ngOnInit() {
 
-  openModal(content){
-      this.modalService.open(content);
+    this.updateForm = this.fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      name: ['', [Validators.required, CustomValidators.rangeLength([2, 150])]],
+      birthDate: ['', [Validators.required]]
+    });
+
+    if (this.user) {
+      this.fillForm(this.user)
     }
+  }
 
-  blockAccount(){
+  fillForm(user: any) {
+    this.updateForm.patchValue({
+      name: user.name,
+      email: user.email,
+      birthDate: user.birth
+    })
+  }
+
+  openModal(content) {
+    this.modalService.open(content);
+  }
+
+  blockAccount() {
     this.modalService.dismissAll();
 
-      if (this.updateForm.valid) {
-          this.userUpdate = Object.assign({}, this.userUpdate, this.updateForm.value);
-          this.userUpdate.id = this.user.id;
+    if (this.updateForm.valid) {
+      this.userUpdate = Object.assign({}, this.userUpdate, this.updateForm.value);
+      this.userUpdate.id = this.user.id;
 
-          this.accountService.blockUser(this.userUpdate)          
-              .subscribe(
-              success => { this.proccessSuccess(success) },
-              fail => { this.proccessFail(fail) }
-            );
-    
-          this.notSavedChanges = false;
-      }
+      this.accountService.blockUser(this.userUpdate)
+        .subscribe(
+          () => { this.proccessSuccess("Conta bloqueada com sucesso") },
+          fail => { this.proccessFail(fail) }
+        );
+
+      this.notSavedChanges = false;
+    }
   }
 
-  proccessSuccess(response) {
-      this.updateForm.reset();
-      this.errors = [];
-      this.accountService.LocalStorage.saveLocalDataUser(response);
-      this.toastr.success('Conta atualizada com sucesso!', 'Sucesso!');
-  
-      this.router.navigate(['/account/list']);
-    }
-  
-    proccessFail(fail: any) {
-      this.errors = fail.error.errors;
-      this.toastr.error('Ocorreu um erro!', 'Opa :(');
-    }    
+  proccessSuccess(info: string) {
+    this.updateForm.reset();
+    this.errors = [];
+    this.toastr.success(info, 'Sucesso!');
 
-  sendMailPassword(){
-      
+    this.router.navigate(['/account/list']);
+  }
+
+  proccessFail(fail: any) {
+    this.errors = fail.error.errors;
+    this.toastr.error('Ocorreu um erro!', 'Opa :(');
+  }
+
+  sendMailPassword() {
+    if (this.updateForm.valid) {
+      this.userUpdate = Object.assign({}, this.userUpdate, this.updateForm.value);
+      this.userUpdate.id = this.user.id;
+
+      this.accountService.sendResetPasswordEmail(this.userUpdate.email)
+        .subscribe(
+          () => { this.proccessSuccess("E-mail enviado com sucesso!") },
+          fail => { this.proccessFail(fail) }
+        );
+
+      this.notSavedChanges = false;
+    }
+  }
+
+  editAccount() {
+    if (this.updateForm.dirty && this.updateForm.valid) {
+      this.userUpdate = Object.assign({}, this.userUpdate, this.updateForm.value);
+      this.userUpdate.id = this.user.id;
+
+      this.accountService.updateUser(this.userUpdate)
+        .subscribe(
+          () => { this.proccessSuccess("Conta atualizada com sucesso") },
+          fail => { this.proccessFail(fail) }
+        );
+
+      this.notSavedChanges = false;
+    }
   }
 }

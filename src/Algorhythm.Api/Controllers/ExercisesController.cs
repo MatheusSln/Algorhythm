@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace Algorhythm.Api.Controllers
@@ -63,6 +64,9 @@ namespace Algorhythm.Api.Controllers
             exerciseDto.Id = null;
 
             var exercise = _mapper.Map<Exercise>(exerciseDto);
+
+            exercise.Question = GetQuestionFormatted(exercise.Question, exercise.CorrectAlternative);
+
             await _exerciseService.Add(exercise);
 
             return CustomResponse(exerciseDto);
@@ -76,6 +80,9 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse(ModelState);
 
             var exercise = _mapper.Map<Exercise>(exerciseDto);
+
+            exercise.Question = GetQuestionFormatted(exercise.Question, exercise.CorrectAlternative);
+
             await _exerciseService.Update(exercise);
 
             return CustomResponse(exerciseDto);
@@ -109,6 +116,28 @@ namespace Algorhythm.Api.Controllers
             await _exerciseService.Update(exercise);
 
             return CustomResponse();
+        }
+
+        private string GetQuestionFormatted(string question, string correctAnswer)
+        {
+            if (question.Contains(correctAnswer))
+            {
+               return question.Replace(correctAnswer, GetUnderLine(correctAnswer));
+            }
+
+            return question;
+        }
+
+        private string GetUnderLine(string correctAnswer)
+        {
+            var sb = new StringBuilder();
+
+            for (int i = 0; i < correctAnswer.Length; i++)
+            {
+                sb.Append('_');
+            }
+
+            return sb.ToString();
         }
     }
 }

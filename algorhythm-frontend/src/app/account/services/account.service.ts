@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
 import { BaseService } from "src/app/services/base.service";
+import { ChangePassword } from "../models/changePassword";
 import { User } from "../models/user";
 
 
@@ -76,5 +77,15 @@ export class AccountService extends BaseService{
             catchError(this.serviceError));
 
     return response;  
+    }
+
+    resetPassword(changePassword: ChangePassword) : Observable<ChangePassword>{
+        let response = this.http
+        .post(this.UrlServiceV1 + 'user/changepassword', changePassword, this.GetHeaderJson())
+        .pipe(
+            map(this.extractData),
+            catchError(this.serviceError));
+
+    return response; 
     }
 }

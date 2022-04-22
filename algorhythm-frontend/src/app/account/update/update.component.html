@@ -1,7 +1,7 @@
 <div class="container main-container">
     <h1>Configurações</h1>
 
-    <form novalidate (ngSubmit)="blockAccount()" [formGroup]="updateForm">
+    <form novalidate (ngSubmit)="editAccount()" [formGroup]="updateForm">
 
         <h4>Ajustes de usuário</h4>
         <hr>
@@ -16,7 +16,7 @@
         <div class="form-group">
             <label class="col-md-2 control-label">E-mail</label>
             <div class="col-md-10">
-                <input class="form-control" id="email" type="text" placeholder="E-mail (obrigatório)" formControlName="email" [ngClass]="{'is-invalid': displayMessage.email }" readonly/>
+                <input class="form-control" id="email" type="text" placeholder="E-mail (obrigatório)" formControlName="email" [ngClass]="{'is-invalid': displayMessage.email }"/>
                 <span class="text-danger" *ngIf="displayMessage.email">
                                 <p [innerHTML]="displayMessage.email"></p>
                             </span>
@@ -45,6 +45,7 @@
 
         <div class="form-group">
             <div class="col-md-10 col-md-offset-2">
+                <span><button class="btn btn-info" id="Registrar" type="submit" [disabled]="!updateForm.valid" >Atualizar usuário</button></span>&nbsp;
                 <span><button class="btn btn-danger" id="Registrar" type="button" [disabled]="!updateForm.valid" (click)="openModal(content)">Bloquear Usuário</button></span>&nbsp;
                 <span><a class="btn btn-warning" id="editPass"  (click)="sendMailPassword()">Enviar e-mail com senha</a></span>&nbsp;
                 <span><a class="btn btn-success"  [routerLink]="['/account/list']" >Voltar</a></span>

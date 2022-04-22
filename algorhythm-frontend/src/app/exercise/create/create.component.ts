@@ -43,6 +43,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
     alternatives: [],
     correctAlternative: "",
     alternativesUpdate: [],
+    explanation: "",
     deletedAt: null
   };
 
@@ -64,6 +65,9 @@ export class CreateComponent implements OnInit, AfterViewInit {
       },
       correctAlternative: {
         required: 'Informe a resposta da questão'
+      },
+      explanation:{
+        required: 'Informe a explicação da questão'
       }
     };
     this.genericValidator = new GenericValidator(this.validationMessage);
@@ -73,7 +77,8 @@ export class CreateComponent implements OnInit, AfterViewInit {
     this.createForm = this.fb.group({
       moduleId: ['', [Validators.required]],
       question: ['', [Validators.required, CustomValidators.rangeLength([10, 300])]],
-      correctAlternative: ['', [Validators.required]]
+      correctAlternative: ['', [Validators.required]],
+      explanation: ['', [Validators.required]]
     });
   }
 
@@ -113,7 +118,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
 
       this.exerciseService.createExercise(this.exercise)
         .subscribe(
-          success => { this.proccessSuccess(success) },
+          () => { this.proccessSuccess() },
           fail => { this.proccessFail(fail) }
         );
 
@@ -121,7 +126,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
     }
   }
 
-  proccessSuccess(response: any) {
+  proccessSuccess() {
     this.createForm.reset();
     this.errors = [];
 

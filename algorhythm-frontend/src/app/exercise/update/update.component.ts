@@ -63,6 +63,9 @@ export class UpdateComponent implements OnInit, AfterViewInit {
         },
         correctAlternative: {
           required: 'Informe a resposta da questão'
+        },
+        explanation:{
+          required: 'Informe a explicação da questão'
         }
       };
       this.genericValidator = new GenericValidator(this.validationMessage);
@@ -77,7 +80,8 @@ export class UpdateComponent implements OnInit, AfterViewInit {
         id: '',
         moduleId: ['', [Validators.required]],
         question: ['', [Validators.required, CustomValidators.rangeLength([10, 300])]],
-        correctAlternative: ['', [Validators.required]]
+        correctAlternative: ['', [Validators.required]],
+        explanation: ['', [Validators.required]]
       });
 
       this.updateAlternativeForm = this.fb.group({
@@ -159,7 +163,8 @@ export class UpdateComponent implements OnInit, AfterViewInit {
             question: this.exercise.question,
             moduleId: this.modules.find((element) => element.id == this.exercise.moduleId.toString()).id,
             correctAlternative: this.exercise.correctAlternative,
-            alternativesUpdate: this.exercise.alternativesUpdate
+            alternativesUpdate: this.exercise.alternativesUpdate,
+            explanation: this.exercise.explanation
         })
     }
 

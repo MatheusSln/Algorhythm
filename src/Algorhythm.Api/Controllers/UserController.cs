@@ -101,6 +101,10 @@ namespace Algorhythm.Api.Controllers
             {
                 var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
+                identityUser.UserName = userDto.Email;
+
+                await _userManager.UpdateAsync(identityUser);
+
                 var token = await _userManager.GenerateChangeEmailTokenAsync(identityUser, userDto.Email);
 
                 var result = await _userManager.ChangeEmailAsync(identityUser, userDto.Email, token);
@@ -135,11 +139,43 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse(false);
             }
 
-            string validToken = HttpUtility.UrlDecode(token).Replace(" ", "+");
+            string validToken = GetValidToken(token);
 
             var user = await _userManager.FindByEmailAsync(email);
 
             var result = await _userManager.ConfirmEmailAsync(user, validToken);
+
+            if (result.Succeeded)
+            {
+                return CustomResponse(true);
+            }
+
+            foreach (var error in result.Errors)
+            {
+                NotifyError(error.Description);
+            }
+
+            return CustomResponse();
+        }
+        
+        [Route("changepassword")]
+        [HttpPost]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto dto)
+        {
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            if (dto.Token is null)
+                return BadRequest();
+
+            string validToken = GetValidToken(dto.Token);
+
+            var user = await _userManager.FindByEmailAsync(dto.Email);
+
+            if (user == null)
+                return NotFound("Usuário não encontrado");
+
+            var result = await _userManager.ResetPasswordAsync(user, validToken, dto.Password);
 
             if (result.Succeeded)
             {
@@ -236,6 +272,8 @@ namespace Algorhythm.Api.Controllers
 
             return response;
         }
+
+        private string GetValidToken(string token)  => HttpUtility.UrlDecode(token).Replace(" ", "+");
 
         private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
