@@ -14,6 +14,7 @@ import { ListComponent } from "./list/list.component";
 import { ExerciseResolve } from "./services/exercise.resolve";
 import { ExerciseService } from "./services/exercise.service";
 import { UpdateComponent } from "./update/update.component";
+import { PerformComponent } from './perform/perform.component';
 
 @NgModule({
     declarations: [
@@ -21,7 +22,8 @@ import { UpdateComponent } from "./update/update.component";
       CreateComponent,
       ListComponent,
       DeleteComponent,
-      UpdateComponent
+      UpdateComponent,
+      PerformComponent
     ],
     imports: [
         CommonModule,

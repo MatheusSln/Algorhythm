@@ -19,6 +19,23 @@ namespace Algorhythm.Data.Repository
                 .FirstOrDefaultAsync(a => a.Id == id);
         }
 
+        public async Task<IEnumerable<Exercise>> GetExerciseAndAlternativesByModule(int moduleId, Guid userId)
+        {
+            return await Db.Exercises.Where(w => w.ModuleId == moduleId && w.DeletedAt == null)
+                .Select(exercise => new Exercise
+                {
+                    Id = exercise.Id,
+                    Question = exercise.Question,
+                    CorrectAlternative = exercise.CorrectAlternative,
+                    Explanation = exercise.Explanation,
+                    Users = exercise.Users.Where(user => user.Id == userId).Select(user => new User
+                    {
+                        Id = user.Id,
+                    })
+                    .ToList(),
+                }).ToListAsync();
+        }
+
         public async Task<IEnumerable<Exercise>> GetExercisesByModule(int moduleId)
         {
             return await Search(e => e.ModuleId == moduleId && e.DeletedAt == null);

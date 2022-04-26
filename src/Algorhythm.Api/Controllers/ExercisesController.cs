@@ -2,7 +2,6 @@
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -16,6 +15,7 @@ namespace Algorhythm.Api.Controllers
     public class ExercisesController : MainController
     {
         private readonly IExerciseRepository _exerciseRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IExerciseService _exerciseService;
         private readonly IAlternativeService _alternativeService;
         private readonly IAlternativeRepository _alternativeRepository;
@@ -26,7 +26,8 @@ namespace Algorhythm.Api.Controllers
                                    IExerciseService exerciseService,
                                    INotifier notifier,
                                    IAlternativeService alternativeService,
-                                   IAlternativeRepository alternativeRepository) :
+                                   IAlternativeRepository alternativeRepository,
+                                   IUserRepository userRepository) :
             base(notifier)
         {
             _exerciseRepository = exerciseRepository;
@@ -34,6 +35,7 @@ namespace Algorhythm.Api.Controllers
             _exerciseService = exerciseService;
             _alternativeService = alternativeService;
             _alternativeRepository = alternativeRepository;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -88,7 +90,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(exerciseDto);
         }
 
-        [Route("alternative")]
+        [Route("alternative")] 
         [HttpPut]
         public async Task<ActionResult<AlternativeDto>> UpdateAlternative(AlternativeDto alternativeDto)
         {
@@ -116,6 +118,30 @@ namespace Algorhythm.Api.Controllers
             await _exerciseService.Update(exercise);
 
             return CustomResponse();
+        }
+
+        [HttpGet("exercisestodo")]
+        public async Task<ActionResult<IEnumerable<Exercise>>> GetExercisesByModuleAndUser(int moduleId, Guid? userId)
+        {
+            if (moduleId == 0 || moduleId > 8 || userId is null)
+            {
+                NotifyError("Parâmetros inválidos");
+                return CustomResponse();
+            }
+
+            var user = await _userRepository.GetById(userId.Value);
+
+            if (user is null)
+            {
+                NotifyError("Usuário não encontrado");
+                return CustomResponse();
+            }
+
+            var exercises = await _exerciseRepository.GetExerciseAndAlternativesByModule(moduleId, userId.Value);
+
+            var exercisesToDo = exercises.Where(w => !w.Users.Any()).ToList();
+
+            return exercisesToDo;
         }
 
         private string GetQuestionFormatted(string question, string correctAnswer)

@@ -9,7 +9,7 @@ namespace Algorhythm.Business.Interfaces
     {
         Task<Exercise> GetExerciseAndAlternatives(Guid id);
         Task<IEnumerable<Exercise>> GetExercisesByModule(int moduleId);
-
+        Task<IEnumerable<Exercise>> GetExerciseAndAlternativesByModule(int moduleId, Guid userId);
         Task<IEnumerable<Exercise>> GetAllExercisesAndAlternatives();
     }
 }
