@@ -61,4 +61,10 @@ export class ExerciseService extends BaseService {
             .get<Exercise>(this.UrlServiceV1 + "exercises/" + id)
             .pipe(catchError(super.serviceError));
     }
+
+    getExerciseToDoByModuleAndUser(moduleId: number, userId: string){
+        return this.http
+            .get<Exercise>(this.UrlServiceV1 + "exercises/exercisestodo?moduleId=" + moduleId + "&userId=" + userId)
+            .pipe(catchError(super.serviceError));
+    }
 }

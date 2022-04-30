@@ -23,7 +23,7 @@ export class CreateComponent implements OnInit, AfterViewInit {
   notSavedChanges: boolean;
 
   modules = [
-    { id: "1", title: "Introdução a Algoritmos", level: 1 },
+    { id: "1", title: "Introdução a algoritmos", level: 1 },
     { id: "2", title: "Operadores de atribuição", level: 2 },
     { id: "3", title: "Operadores aritméticos", level: 3 },
     { id: "4", title: "Operadores de incremento e decremento", level: 4 },

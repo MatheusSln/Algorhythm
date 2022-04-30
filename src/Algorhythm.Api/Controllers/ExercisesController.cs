@@ -121,7 +121,7 @@ namespace Algorhythm.Api.Controllers
         }
 
         [HttpGet("exercisestodo")]
-        public async Task<ActionResult<IEnumerable<Exercise>>> GetExercisesByModuleAndUser(int moduleId, Guid? userId)
+        public async Task<ActionResult<ExerciseDto>> GetExercisesByModuleAndUser(int moduleId, Guid? userId)
         {
             if (moduleId == 0 || moduleId > 8 || userId is null)
             {
@@ -139,7 +139,7 @@ namespace Algorhythm.Api.Controllers
 
             var exercises = await _exerciseRepository.GetExerciseAndAlternativesByModule(moduleId, userId.Value);
 
-            var exercisesToDo = exercises.Where(w => !w.Users.Any()).ToList();
+            var exercisesToDo = _mapper.Map<ExerciseDto>(exercises.Where(w => !w.Users.Any()).FirstOrDefault());
 
             return exercisesToDo;
         }

@@ -5,16 +5,26 @@
                 <div class="col-xl-6 col-lg-10 mx-auto" id="content">
                     <div class="row">
                         <div class="col-md pt-5">
-                            <p class="d-flex justify-content-center">Este é um teste de enunciado, digamos que
-                                algoritmos sejam uma sequência de
-                                __________ </p>
+                            <a href="javascript:void(0)" class="d-flex justify-content-center"> X</a>
+                            <br>
+                            <p class="d-flex justify-content-center"> {{exercise.question}} </p>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center col-12 py-4 ">
-                        <button class="btn btn-primary mr-3 mb-1">Instruções</button>
-                        <button class="btn btn-primary mr-3 mb-1">Teste</button>
-                        <button class="btn btn-primary mr-3 mb-1">Códigos</button>
-                        <button class="btn btn-primary mr-3 mb-1">Teste</button>
+                        <button class="btn btn-primary mr-3 mb-1" *ngFor="let alternative of exercise.alternatives">{{alternative}}</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="col-xl-6 col-lg-10 mx-auto" id="content">
+                    <div class="row">
+                        <div class="col-md pt-5">
+                            <div class="d-flex justify-content-between col-12 py-2 ">
+                                <button type="button" class="d-flex btn btn-warning mr-3 p-2 butao" (click)="skipExercise()">Pular</button>
+                                <p class="d-flex justify-content-center" *ngIf="wrongAnswer || skip"> {{exercise.explanation}} </p>
+                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao">Confirmar</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

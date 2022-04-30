@@ -28,6 +28,7 @@ namespace Algorhythm.Data.Repository
                     Question = exercise.Question,
                     CorrectAlternative = exercise.CorrectAlternative,
                     Explanation = exercise.Explanation,
+                    Alternatives = exercise.Alternatives.Where(a => a.ExerciseId == exercise.Id).ToList(),
                     Users = exercise.Users.Where(user => user.Id == userId).Select(user => new User
                     {
                         Id = user.Id,

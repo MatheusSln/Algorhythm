@@ -15,6 +15,7 @@ import { ExerciseResolve } from "./services/exercise.resolve";
 import { ExerciseService } from "./services/exercise.service";
 import { UpdateComponent } from "./update/update.component";
 import { PerformComponent } from './perform/perform.component';
+import { PerformResolve } from "./services/perform.resolve";
 
 @NgModule({
     declarations: [
@@ -36,7 +37,8 @@ import { PerformComponent } from './perform/perform.component';
     ],
     providers: [
       ExerciseService,
-      ExerciseResolve
+      ExerciseResolve,
+      PerformResolve
     ]
   })
   export class ExerciseModule { }
