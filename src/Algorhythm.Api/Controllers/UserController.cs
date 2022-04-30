@@ -214,7 +214,7 @@ namespace Algorhythm.Api.Controllers
 
             var resetPasswordLink = string.Format("http://127.0.0.1:4200/account/reset/{0}/{1}", urlToken, user.Email);
 
-             await _emailSender.SendEmailAsync(user.Email, "Recuperação de senha", "Clique aqui para trocar sua senha: " + resetPasswordLink);
+            await _emailSender.SendEmailAsync(user.Email, "Recuperação de senha", "Clique aqui para trocar sua senha: " + resetPasswordLink);
 
             return CustomResponse();
         }
