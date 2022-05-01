@@ -7,27 +7,72 @@
                         <div class="col-md pt-5">
                             <a href="javascript:void(0)" class="d-flex justify-content-center"> X</a>
                             <br>
-                            <p class="d-flex justify-content-center"> {{exercise.question}} </p>
+                            <p class="d-flex justify-content-center question"> {{exercise.question}} </p>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center col-12 py-4 ">
-                        <button class="btn btn-primary mr-3 mb-1" *ngFor="let alternative of exercise.alternatives">{{alternative}}</button>
+                        <form novalidate [formGroup]="answerForm">
+                        <ul class="list-group list-group-horizontal  alternative">
+                            <li *ngFor="let item of exercise.alternatives" class="">
+
+                                <input type="radio" class="alternative" id="{{item}}" value="{{item}}" name="radio" formControlName="radio" />
+                                <label for="{{item}}" class="btn btn-info mr-2 alternative">{{item}}</label>
+
+                            </li>
+                        </ul>
+                    </form>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12">
+            <div></div>
+
+            <div class="col-md-12 disapear" *ngIf="!wrongAnswer || !correctAnswer || !skip" [ngClass]="{disapear: wrongAnswer || correctAnswer || skip}">
+                <hr>
                 <div class="col-xl-6 col-lg-10 mx-auto" id="content">
                     <div class="row">
-                        <div class="col-md pt-5">
-                            <div class="d-flex justify-content-between col-12 py-2 ">
-                                <button type="button" class="d-flex btn btn-warning mr-3 p-2 butao" (click)="skipExercise()">Pular</button>
-                                <p class="d-flex justify-content-center" *ngIf="wrongAnswer || skip"> {{exercise.explanation}} </p>
-                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao">Confirmar</button>
+                        <div class="col-md pt-2">
+                            <div class="d-flex justify-content-between col-12 ">
+                                <button type="button" class="d-flex btn butao skip"
+                                    (click)="skipExercise()">Pular</button>
+                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao" (click)="verifyAnswer()" [disabled]="!answerForm.dirty">Verificar</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="col-md-12 explanation" *ngIf="wrongAnswer || skip">
+                <div class="col-xl-6 col-lg-10 mx-auto" id="content">
+                    <div class="row">
+                        <div class="col-md pt-2">
+                            <div class="d-flex justify-content-between col-12 ">
+                                <div>
+                                    <h2 class="explanation">Resposta:</h2>
+                                    <p class="d-flex justify-content-center explanation">
+                                        {{exercise.explanation}} </p>
+                                </div>
+                                <button type="button" class="d-flex btn btn-danger ml-2 p-2 butao">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-12 correctAnswer" *ngIf="correctAnswer">
+                <div class="col-xl-6 col-lg-10 mx-auto" id="content">
+                    <div class="row">
+                        <div class="col-md pt-2">
+                            <div class="d-flex justify-content-between col-12 ">
+                                <div>
+                                    <h2 class="correctAnswer">Acertou!</h2>
+                                </div>
+                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao">Continuar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+
         </div>
     </div>
 </div>

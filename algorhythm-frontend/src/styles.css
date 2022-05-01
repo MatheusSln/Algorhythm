@@ -82,3 +82,63 @@ textarea {
     width: 88.27px;
     height: 42px;
 }
+
+input.alternative{
+    visibility:hidden;
+}
+
+label.alternative{
+    cursor: pointer;
+}
+
+input:checked + label {
+    background: rgb(23, 163, 65);
+}
+
+ul.alternative{
+        list-style: none;
+}
+
+div.explanation{
+    min-height: 200px;
+    background-color: #FFDFE0;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+p.explanation{
+    color: #ea2b2b;
+    font-size: medium;
+}
+
+h2.explanation{
+    color: #ea2b2b;
+}
+
+div.correctAnswer{
+    min-height: 200px;
+    background-color: #D7FFB8;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+p.correctAnswer{
+    color: #58A700;
+    font-size: medium;
+}
+
+h2.correctAnswer{
+    color: #58A700;
+}
+
+button.skip{
+    background-color: #e5e5e5;
+}
+
+.disapear{
+    display: none;
+}
+
+p.question{
+    font-size: 2em;
+}

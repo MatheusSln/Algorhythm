@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
+import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageUtils } from 'src/app/utils/localstorage';
@@ -11,6 +12,10 @@ import { ExerciseService } from '../services/exercise.service';
 })
 export class PerformComponent implements OnInit {
 
+  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
+
+  answerForm: FormGroup;
+
   errors: any[] = [];
 
   moduleId: number;
@@ -20,9 +25,12 @@ export class PerformComponent implements OnInit {
   exercise : Exercise = new Exercise();
 
   wrongAnswer : boolean = false;
+  correctAnswer : boolean = false;
   skip : boolean = false
 
-  constructor(private route: ActivatedRoute, private router: Router, private exerciseService: ExerciseService, private toastr: ToastrService) {
+  radio: string;
+
+  constructor(private fb: FormBuilder,private route: ActivatedRoute, private router: Router, private exerciseService: ExerciseService, private toastr: ToastrService) {
     this.moduleId = this.route.snapshot.data['number'];
   }
 
@@ -30,6 +38,10 @@ export class PerformComponent implements OnInit {
     this.user = this.localStorage.getUser();
 
     if (this.user) {
+
+      this.answerForm = this.fb.group({
+        radio: ['']
+      });
 
       this.exerciseService.getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
       .subscribe(
@@ -54,4 +66,7 @@ export class PerformComponent implements OnInit {
     this.skip = true;
   }
 
+  verifyAnswer(){
+    this.answerForm.value;
+  }
 }

@@ -144,6 +144,17 @@ namespace Algorhythm.Api.Controllers
             return exercisesToDo;
         }
 
+        public async Task<ActionResult> VerifyAnswer(string answer, Guid? exerciseId, Guid? userId)
+        {
+            if (exerciseId is null || userId is null)
+            {
+                NotifyError("Parâmetros inválidos");
+                return CustomResponse();
+            }
+
+            throw new NotImplementedException();
+        }
+
         private string GetQuestionFormatted(string question, string correctAnswer)
         {
             if (question.Contains(correctAnswer))
