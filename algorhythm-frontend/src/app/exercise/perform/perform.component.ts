@@ -53,6 +53,11 @@ export class PerformComponent implements OnInit {
   }
 
   proccessSuccess(data : any){
+      if (data == null){
+        this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
+        this.router.navigate(['/home']);
+      }
+
       this.exercise = data;
   }
 
@@ -62,11 +67,42 @@ export class PerformComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  skipExercise(): void{
-    this.skip = true;
+  verifyAnswer(){
+
+    if(this.answerForm.dirty){
+      
+      this.exerciseService.verifyAnswer(this.answerForm.value.radio, this.exercise.id, this.user.id.toString())
+      .subscribe(
+        data => {this.proccessSuccessVerifyAnswer(data)},
+        fail => {this.proccessFail(fail)}
+      );
+    } 
   }
 
-  verifyAnswer(){
-    this.answerForm.value;
+  skipExercise(){
+      this.exerciseService.verifyAnswer(null, this.exercise.id, this.user.id.toString())
+      .subscribe(
+        data => {this.proccessSuccessVerifyAnswer(data)},
+        fail => {this.proccessFail(fail)}
+      );
+  }
+
+  continue(){
+    this.exerciseService.getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
+    .subscribe(
+      data => { this.proccessSuccess(data)
+        this.wrongAnswer = false,
+        this.correctAnswer = false,
+        this.skip = false},
+      fail => { this.proccessFail(fail) }
+    );
+  }
+
+  proccessSuccessVerifyAnswer(data: boolean){
+    if (data == true){
+      this.correctAnswer = data
+    }else{
+      this.wrongAnswer = true;
+    }
   }
 }

@@ -62,9 +62,19 @@ export class ExerciseService extends BaseService {
             .pipe(catchError(super.serviceError));
     }
 
-    getExerciseToDoByModuleAndUser(moduleId: number, userId: string){
+    getExerciseToDoByModuleAndUser(moduleId: number, userId: string) {
         return this.http
             .get<Exercise>(this.UrlServiceV1 + "exercises/exercisestodo?moduleId=" + moduleId + "&userId=" + userId)
             .pipe(catchError(super.serviceError));
+    }
+
+    verifyAnswer(answer: string, exerciseId: string, userId: string) {
+        let response = this.http
+            .post(this.UrlServiceV1 + 'exercises/verifyanswer',{answer : answer, exerciseId: exerciseId, userId: userId}, this.GetHeaderJson())
+            .pipe(
+                map(this.extractData),
+                catchError(this.serviceError));
+
+        return response;
     }
 }

@@ -144,15 +144,33 @@ namespace Algorhythm.Api.Controllers
             return exercisesToDo;
         }
 
-        public async Task<ActionResult> VerifyAnswer(string answer, Guid? exerciseId, Guid? userId)
+        [HttpPost("verifyanswer")]
+        public async Task<ActionResult> VerifyAnswer(ExerciseAnswerDto dto)
         {
-            if (exerciseId is null || userId is null)
+            if (!ModelState.IsValid)
+                return CustomResponse(ModelState);
+
+            var exercise = await _exerciseRepository.GetExerciseAndUser(dto.ExerciseId, dto.UserId);
+
+            if (exercise is null)
             {
-                NotifyError("Parâmetros inválidos");
+                NotifyError("Exercício não encontrado");
                 return CustomResponse();
             }
 
-            throw new NotImplementedException();
+            if (!exercise.Users.Any())
+            {
+                exercise.Users.Add(await _userRepository.GetById(dto.UserId));
+
+                await _exerciseRepository.Update(exercise);
+            }
+
+            if (exercise.CorrectAlternative == dto.answer)
+            {
+                return CustomResponse(true);
+            }
+
+            return CustomResponse(false);
         }
 
         private string GetQuestionFormatted(string question, string correctAnswer)
