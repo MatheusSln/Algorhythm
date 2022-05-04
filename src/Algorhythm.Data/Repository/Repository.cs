@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Algorhythm.Data.Repository
 {
-    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : Base, new()
+    public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity : BaseEntity, new()
     {
         protected readonly AlgorhythmDbContext Db;
         protected readonly DbSet<TEntity> DbSet;
@@ -45,12 +45,6 @@ namespace Algorhythm.Data.Repository
         public virtual async Task Update(TEntity obj)
         {
             DbSet.Update(obj);
-            await SaveChanges();
-        }
-
-        public virtual async Task Remove(Guid id)
-        {
-            DbSet.Remove(new TEntity { Id = id });
             await SaveChanges();
         }
 

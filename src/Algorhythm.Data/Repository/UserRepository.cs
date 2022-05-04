@@ -21,7 +21,7 @@ namespace Algorhythm.Data.Repository
 
         public async Task<User> GetUserAndExercisesByEmail(string email)
         {
-            return await Db.Users.AsNoTracking().Include(e => e.Exercises)
+            return await Db.Users.AsNoTracking().Include(e => e.ExerciseUser)
                 .FirstOrDefaultAsync(u => u.Email == email);
         }
     }

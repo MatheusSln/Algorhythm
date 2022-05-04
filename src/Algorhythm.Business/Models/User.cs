@@ -16,6 +16,6 @@ namespace Algorhythm.Business.Models
 
         public DateTime? BlockedAt { get; set; }
 
-        public List<Exercise> Exercises { get; set; }
+        public List<ExerciseUser> ExerciseUser { get; set; }
     }
 }

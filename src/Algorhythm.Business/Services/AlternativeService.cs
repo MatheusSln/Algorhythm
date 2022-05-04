@@ -32,11 +32,6 @@ namespace Algorhythm.Business.Services
             await _alternativeRepository.Update(alternative);
         }
 
-        public async Task Remove(Guid id)
-        {
-            await _alternativeRepository.Remove(id);
-        }
-
         public void Dispose()
         {
             _alternativeRepository?.Dispose();

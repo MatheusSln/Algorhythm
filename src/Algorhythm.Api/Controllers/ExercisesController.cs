@@ -19,6 +19,7 @@ namespace Algorhythm.Api.Controllers
         private readonly IExerciseService _exerciseService;
         private readonly IAlternativeService _alternativeService;
         private readonly IAlternativeRepository _alternativeRepository;
+        private readonly IExerciseUserRepository _exerciseUserRepository;
         private readonly IMapper _mapper;
 
         public ExercisesController(IExerciseRepository exerciseRepository,
@@ -27,7 +28,8 @@ namespace Algorhythm.Api.Controllers
                                    INotifier notifier,
                                    IAlternativeService alternativeService,
                                    IAlternativeRepository alternativeRepository,
-                                   IUserRepository userRepository) :
+                                   IUserRepository userRepository,
+                                   IExerciseUserRepository exerciseUserRepository) :
             base(notifier)
         {
             _exerciseRepository = exerciseRepository;
@@ -36,6 +38,7 @@ namespace Algorhythm.Api.Controllers
             _alternativeService = alternativeService;
             _alternativeRepository = alternativeRepository;
             _userRepository = userRepository;
+            _exerciseUserRepository = exerciseUserRepository;
         }
 
         [HttpGet]
@@ -158,12 +161,14 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse();
             }
 
-            if (!exercise.Users.Any())
-            {
-                exercise.Users.Add(await _userRepository.GetById(dto.UserId));
+            //if (!exercise.Users.Any())
+            //{
+            //    exercise.Users.Add(await _userRepository.GetById(dto.UserId));
 
-                await _exerciseRepository.Update(exercise);
-            }
+            //    await _exerciseRepository.Update(exercise);
+            //}
+
+            await _exerciseUserRepository.Add(new ExerciseUser { ExercisesId = dto.ExerciseId, UsersId = dto.UserId });
 
             if (exercise.CorrectAlternative == dto.answer)
             {

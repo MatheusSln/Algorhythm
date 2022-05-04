@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 namespace Algorhythm.Business.Interfaces
 {
-    public interface IExerciseService : IDisposable
+    public interface IExerciseUserRepository : IRepository<ExerciseUser>
     {
-        Task Add(Exercise exercise);
-        Task Update(Exercise exercise);
+        Task DeleteAllExerciseByUser(Guid UserId);
     }
 }

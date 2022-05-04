@@ -2,7 +2,7 @@
 
 namespace Algorhythm.Business.Models
 {
-    public abstract class Base
+    public abstract class Base : BaseEntity
     {
         protected Base()
         {
@@ -11,4 +11,6 @@ namespace Algorhythm.Business.Models
 
         public Guid Id { get; set; }
     }
+
+    public abstract class BaseEntity { }
 }

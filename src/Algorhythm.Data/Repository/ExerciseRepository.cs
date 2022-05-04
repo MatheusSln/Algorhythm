@@ -59,11 +59,6 @@ namespace Algorhythm.Data.Repository
                     CorrectAlternative = exercise.CorrectAlternative,
                     Explanation = exercise.Explanation,
                     Alternatives = exercise.Alternatives.Where(a => a.ExerciseId == exercise.Id).ToList(),
-                    Users = exercise.Users.Where(user => user.Id == userId).Select(user => new User
-                    {
-                        Id = user.Id,
-                    })
-                    .ToList(),
                 }).FirstOrDefaultAsync();
         }
     }

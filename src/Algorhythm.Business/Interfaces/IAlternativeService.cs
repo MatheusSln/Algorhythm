@@ -8,6 +8,5 @@ namespace Algorhythm.Business.Interfaces
     {
         Task Add(Alternative alternative);
         Task Update(Alternative alternative);
-        Task Remove(Guid id);
     }
 }

@@ -16,14 +16,12 @@ namespace Algorhythm.Data.Context
 
         public DbSet<User> Users { get; set; }
 
+        public DbSet<ExerciseUser> ExerciseUsers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AlgorhythmDbContext).Assembly);
-
-            modelBuilder.Entity<User>()
-                .HasMany<Exercise>(e => e.Exercises)
-                .WithMany(u => u.Users);
 
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys())) relationship.DeleteBehavior = DeleteBehavior.ClientSetNull; 
 
