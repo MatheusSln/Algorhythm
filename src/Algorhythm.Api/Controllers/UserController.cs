@@ -24,6 +24,8 @@ namespace Algorhythm.Api.Controllers
     {
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepository;
+        private readonly IExerciseRepository _exerciseRepository;
+        private readonly IModuleRepository _moduleRepository;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
         private readonly IEmailSender _emailSender;
@@ -36,7 +38,9 @@ namespace Algorhythm.Api.Controllers
                               IUserRepository userRepository,
                               IUserService userService,
                               IMapper mapper,
-                              IEmailSender emailSender) :
+                              IEmailSender emailSender,
+                              IExerciseRepository exerciseRepository,
+                              IModuleRepository moduleRepository) :
             base(notifier)
         {
             _userManager = userManager;
@@ -45,6 +49,8 @@ namespace Algorhythm.Api.Controllers
             _userService = userService;
             _mapper = mapper;
             _emailSender = emailSender;
+            _exerciseRepository = exerciseRepository;
+            _moduleRepository = moduleRepository;
         }
 
         [HttpGet]
@@ -217,6 +223,37 @@ namespace Algorhythm.Api.Controllers
             await _emailSender.SendEmailAsync(user.Email, "Recuperação de senha", "Clique aqui para trocar sua senha: " + resetPasswordLink);
 
             return CustomResponse();
+        }
+
+        [HttpGet("modules")]
+        public async Task<IActionResult> GetModulesByUser(Guid userId)
+        {
+            var user = await _userRepository.GetValidUser(userId);
+
+            if (user is null)
+            {
+                NotifyError("Usuário não encontrado");
+                NotFound();
+            }
+
+            var exercisesUser = await _exerciseRepository.GetExercisesPerformedByUser(userId);
+
+            var modules = await _moduleRepository.GetAll();
+
+            var result = new List<ModulesFinishedDto>();
+
+            foreach (var module in modules)
+            {
+                var moduleExercisesAmount = await _exerciseRepository.GetAmountOfExercisesByModule(module.Id);
+
+                result.Add(new ModulesFinishedDto
+                {
+                    ModuleId = module.Id,
+                    IsFinished = moduleExercisesAmount == exercisesUser.Where(w => w.ModuleId == module.Id).Count()
+                });
+            }
+
+            return CustomResponse(result);
         }
 
         private async Task<LoginResponseDto> GerarJwt(string email)

@@ -29,11 +29,7 @@ namespace Algorhythm.Data.Repository
                     CorrectAlternative = exercise.CorrectAlternative,
                     Explanation = exercise.Explanation,
                     Alternatives = exercise.Alternatives.Where(a => a.ExerciseId == exercise.Id).ToList(),
-                    Users = exercise.Users.Where(user => user.Id == userId).Select(user => new User
-                    {
-                        Id = user.Id,
-                    })
-                    .ToList(),
+                    ExerciseUsers = exercise.ExerciseUsers.Where(w => w.UsersId == userId).ToList(),
                 }).ToListAsync();
         }
 
@@ -60,6 +56,16 @@ namespace Algorhythm.Data.Repository
                     Explanation = exercise.Explanation,
                     Alternatives = exercise.Alternatives.Where(a => a.ExerciseId == exercise.Id).ToList(),
                 }).FirstOrDefaultAsync();
+        }
+
+        public async Task<int> GetAmountOfExercisesByModule(int moduleId)
+        {
+            return  await Db.Exercises.Where(w => w.ModuleId == moduleId && w.DeletedAt == null).CountAsync();
+        }
+
+        public async Task<IEnumerable<Exercise>> GetExercisesPerformedByUser(Guid userId)
+        {
+            return await Db.Exercises.Where(w => w.ExerciseUsers.Select(s => s.UsersId).Contains(userId)).ToListAsync();
         }
     }
 }

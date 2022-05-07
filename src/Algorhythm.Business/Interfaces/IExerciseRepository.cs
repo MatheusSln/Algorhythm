@@ -12,5 +12,9 @@ namespace Algorhythm.Business.Interfaces
         Task<IEnumerable<Exercise>> GetExerciseAndAlternativesByModule(int moduleId, Guid userId);
         Task<IEnumerable<Exercise>> GetAllExercisesAndAlternatives();
         Task<Exercise> GetExerciseAndUser(Guid exerciseId, Guid userId);
+
+        Task<int> GetAmountOfExercisesByModule(int moduleId);
+
+        Task<IEnumerable<Exercise>> GetExercisesPerformedByUser(Guid userId);
     }
 }

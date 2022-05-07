@@ -20,8 +20,6 @@ namespace Algorhythm.Business.Models
 
         public IEnumerable<Alternative> Alternatives { get; set; }
 
-        public List<User> Users { get; set; }
-
         public List<ExerciseUser> ExerciseUsers { get; set; }
     }
 }

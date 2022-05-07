@@ -142,7 +142,7 @@ namespace Algorhythm.Api.Controllers
 
             var exercises = await _exerciseRepository.GetExerciseAndAlternativesByModule(moduleId, userId.Value);
 
-            var exercisesToDo = _mapper.Map<ExerciseDto>(exercises.Where(w => !w.Users.Any()).FirstOrDefault());
+            var exercisesToDo = _mapper.Map<ExerciseDto>(exercises.Where(w => !w.ExerciseUsers.Any()).FirstOrDefault());
 
             return exercisesToDo;
         }

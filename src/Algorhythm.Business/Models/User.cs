@@ -16,6 +16,8 @@ namespace Algorhythm.Business.Models
 
         public DateTime? BlockedAt { get; set; }
 
+        //EF Relation
+
         public List<ExerciseUser> ExerciseUser { get; set; }
     }
 }
