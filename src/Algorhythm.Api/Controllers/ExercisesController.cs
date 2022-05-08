@@ -1,4 +1,5 @@
 ﻿using Algorhythm.Api.Dtos;
+using Algorhythm.Business.Enum;
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
@@ -132,7 +133,7 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse();
             }
 
-            var user = await _userRepository.GetById(userId.Value);
+            var user = await _userRepository.GetValidUser(userId.Value);
 
             if (user is null)
             {
@@ -143,6 +144,12 @@ namespace Algorhythm.Api.Controllers
             var exercises = await _exerciseRepository.GetExerciseAndAlternativesByModule(moduleId, userId.Value);
 
             var exercisesToDo = _mapper.Map<ExerciseDto>(exercises.Where(w => !w.ExerciseUsers.Any()).FirstOrDefault());
+
+            if (exercisesToDo is null && (int)user.Level == moduleId && user.Level != Level.Repetition)
+            {
+                user.Level = (Level)moduleId + 1;
+                await _userRepository.Update(user);
+            }
 
             return exercisesToDo;
         }
