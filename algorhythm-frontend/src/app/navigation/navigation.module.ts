@@ -9,6 +9,7 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { MenuLoginComponent } from "./menu-login/menu-login.component";
 import { AccountService } from "../account/services/account.service";
 import { HttpClientModule } from "@angular/common/http";
+import { NgxSpinner, NgxSpinnerModule } from "ngx-spinner";
 
 @NgModule({
     declarations: [
@@ -22,7 +23,8 @@ import { HttpClientModule } from "@angular/common/http";
         CommonModule,
         RouterModule,
         NgbModule,
-        HttpClientModule
+        HttpClientModule,
+        NgxSpinnerModule
     ],
     exports: [
         MenuComponent,

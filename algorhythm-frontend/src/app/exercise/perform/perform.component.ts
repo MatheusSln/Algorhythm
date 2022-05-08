@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChildren } from '@angular/core';
 import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { LocalStorageUtils } from 'src/app/utils/localstorage';
 import { Exercise } from '../models/exercise';
@@ -8,11 +9,11 @@ import { ExerciseService } from '../services/exercise.service';
 
 @Component({
   selector: 'app-perform',
-  templateUrl: './perform.component.html'
+  templateUrl: './perform.component.html',
 })
 export class PerformComponent implements OnInit {
-
-  @ViewChildren(FormControlName, { read: ElementRef }) formInputElements: ElementRef[];
+  @ViewChildren(FormControlName, { read: ElementRef })
+  formInputElements: ElementRef[];
 
   answerForm: FormGroup;
 
@@ -22,43 +23,56 @@ export class PerformComponent implements OnInit {
   user: any;
   localStorage = new LocalStorageUtils();
 
-  exercise : Exercise = new Exercise();
+  exercise: Exercise = new Exercise();
 
-  wrongAnswer : boolean = false;
-  correctAnswer : boolean = false;
-  skip : boolean = false
+  wrongAnswer: boolean = false;
+  correctAnswer: boolean = false;
+  skip: boolean = false;
 
   radio: string;
 
-  constructor(private fb: FormBuilder,private route: ActivatedRoute, private router: Router, private exerciseService: ExerciseService, private toastr: ToastrService) {
+  constructor(
+    private fb: FormBuilder,
+    private route: ActivatedRoute,
+    private router: Router,
+    private exerciseService: ExerciseService,
+    private toastr: ToastrService,
+    private spinner: NgxSpinnerService
+  ) {
     this.moduleId = this.route.snapshot.data['number'];
   }
 
   ngOnInit(): void {
+    this.spinner.show();
     this.user = this.localStorage.getUser();
 
     if (this.user) {
-
       this.answerForm = this.fb.group({
-        radio: ['']
+        radio: [''],
       });
 
-      this.exerciseService.getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
-      .subscribe(
-        data => { this.proccessSuccess(data) },
-        fail => { this.proccessFail(fail) }
-      );
-
+      this.exerciseService
+        .getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
+        .subscribe(
+          (data) => {
+            this.proccessSuccess(data);
+          },
+          (fail) => {
+            this.proccessFail(fail);
+          }
+        );
     }
+
+    this.spinner.hide();
   }
 
-  proccessSuccess(data : any){
-      if (data == null){
-        this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
-        this.router.navigate(['/home']);
-      }
+  proccessSuccess(data: any) {
+    if (data == null) {
+      this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
+      this.router.navigate(['/home']);
+    }
 
-      this.exercise = data;
+    this.exercise = data;
   }
 
   proccessFail(fail: any) {
@@ -67,41 +81,62 @@ export class PerformComponent implements OnInit {
     this.router.navigate(['/home']);
   }
 
-  verifyAnswer(){
+  verifyAnswer() {
+    if (this.answerForm.dirty) {
+      this.exerciseService
+        .verifyAnswer(
+          this.answerForm.value.radio,
+          this.exercise.id,
+          this.user.id.toString()
+        )
+        .subscribe(
+          (data) => {
+            this.proccessSuccessVerifyAnswer(data);
+          },
+          (fail) => {
+            this.proccessFail(fail);
+          }
+        );
+    }
+  }
 
-    if(this.answerForm.dirty){
-      
-      this.exerciseService.verifyAnswer(this.answerForm.value.radio, this.exercise.id, this.user.id.toString())
+  skipExercise() {
+    this.exerciseService
+      .verifyAnswer(null, this.exercise.id, this.user.id.toString())
       .subscribe(
-        data => {this.proccessSuccessVerifyAnswer(data)},
-        fail => {this.proccessFail(fail)}
+        (data) => {
+          this.proccessSuccessVerifyAnswer(data);
+        },
+        (fail) => {
+          this.proccessFail(fail);
+        }
       );
-    } 
   }
 
-  skipExercise(){
-      this.exerciseService.verifyAnswer(null, this.exercise.id, this.user.id.toString())
+  continue() {
+    this.answerForm.reset();
+    this.spinner.show();
+    this.exerciseService
+      .getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
       .subscribe(
-        data => {this.proccessSuccessVerifyAnswer(data)},
-        fail => {this.proccessFail(fail)}
+        (data) => {
+          this.proccessSuccess(data);
+          (this.wrongAnswer = false),
+            (this.correctAnswer = false),
+            (this.skip = false),
+            this.spinner.hide();
+        },
+        (fail) => {
+          this.proccessFail(fail),
+          this.spinner.hide();
+        }
       );
   }
 
-  continue(){
-    this.exerciseService.getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
-    .subscribe(
-      data => { this.proccessSuccess(data)
-        this.wrongAnswer = false,
-        this.correctAnswer = false,
-        this.skip = false},
-      fail => { this.proccessFail(fail) }
-    );
-  }
-
-  proccessSuccessVerifyAnswer(data: boolean){
-    if (data == true){
-      this.correctAnswer = data
-    }else{
+  proccessSuccessVerifyAnswer(data: boolean) {
+    if (data == true) {
+      this.correctAnswer = data;
+    } else {
       this.wrongAnswer = true;
     }
   }

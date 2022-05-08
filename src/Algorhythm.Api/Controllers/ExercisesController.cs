@@ -161,13 +161,6 @@ namespace Algorhythm.Api.Controllers
                 return CustomResponse();
             }
 
-            //if (!exercise.Users.Any())
-            //{
-            //    exercise.Users.Add(await _userRepository.GetById(dto.UserId));
-
-            //    await _exerciseRepository.Update(exercise);
-            //}
-
             await _exerciseUserRepository.Add(new ExerciseUser { ExercisesId = dto.ExerciseId, UsersId = dto.UserId });
 
             if (exercise.CorrectAlternative == dto.answer)

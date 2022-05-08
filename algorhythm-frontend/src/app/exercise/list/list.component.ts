@@ -19,12 +19,13 @@ export class ListComponent implements OnInit {
 
     this.exerciseService.getAll()
       .subscribe(
-        exercises => this.exercises = exercises,
-        
-        error => this.errorMessage);
-
-      setTimeout(()=> {
-        this.spinner.hide();
-      }, 1000);
+        exercises => {
+          this.spinner.hide(),
+          this.exercises = exercises
+        },
+        error => {
+          this.spinner.hide(),
+          this.errorMessage = error
+        });
   }
 }

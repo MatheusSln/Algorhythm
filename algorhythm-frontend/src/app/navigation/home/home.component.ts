@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
 import { Modules } from 'src/app/account/models/modules';
 import { AccountService } from 'src/app/account/services/account.service';
@@ -32,10 +33,12 @@ export class HomeComponent implements OnInit {
     private router: Router,
     private accountService: AccountService,
     private toastr: ToastrService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private spinner: NgxSpinnerService
   ) {}
 
   ngOnInit(): void {
+    this.spinner.show();
     this.token = this.localStorageUtils.getTokenUser();
     this.user = this.localStorageUtils.getUser();
 
@@ -51,6 +54,8 @@ export class HomeComponent implements OnInit {
         () => this.proccessError(true)
       );
     }
+
+    this.spinner.hide();
   }
 
   loggedUser(): boolean {

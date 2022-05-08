@@ -91,10 +91,6 @@ export class UpdateComponent implements OnInit, AfterViewInit {
     })
 
     this.fillForm();
-
-    setTimeout(() => {
-      this.spinner.hide();
-    }, 1000);
   }
 
   ngAfterViewInit(): void {
@@ -145,7 +141,7 @@ export class UpdateComponent implements OnInit, AfterViewInit {
   updateAlternative() {
     if (this.updateAlternativeForm.dirty && this.updateAlternativeForm.valid) {
       this.alternative = Object.assign({}, this.alternative, this.updateAlternativeForm.value);
-
+      this.spinner.show();
       this.exerciseService.updateAlternative(this.alternative)
         .subscribe(
           () => { this.proccessSuccessAlternative(this.alternative) },
@@ -166,6 +162,8 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       alternativesUpdate: this.exercise.alternativesUpdate,
       explanation: this.exercise.explanation
     })
+
+    this.spinner.hide();
   }
 
   fillAlternativeForm(alternative: Alternative) {
@@ -178,7 +176,7 @@ export class UpdateComponent implements OnInit, AfterViewInit {
 
   proccessSuccessAlternative(alternative: Alternative) {
     this.errors = [];
-
+    this.spinner.hide();
     this.toastr.success('Exercício atualizado com sucesso!', 'Sucesso!');
     this.modalService.dismissAll();
     this.exercise.alternativesUpdate.find((element) => element.id == alternative.id).title = alternative.title;
@@ -199,6 +197,7 @@ export class UpdateComponent implements OnInit, AfterViewInit {
   }
 
   proccessFailAlternative(fail: any) {
+    this.spinner.hide();
     this.errorsAlternative = fail.error.errors;
     this.toastr.error('Ocorreu um erro!', 'Opa :(');
   }

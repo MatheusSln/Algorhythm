@@ -19,12 +19,14 @@ import { AccountService } from "../services/account.service";
   
       this.accountService.getAll()
         .subscribe(
-          users => this.users = users,
+          users => {
+            this.users = users,
+            this.spinner.hide();
+          },
           
-          error => this.errorMessage = error);
-  
-        setTimeout(()=> {
-          this.spinner.hide();
-        }, 1000);
+          error =>{
+            this.errorMessage = error,
+            this.spinner.hide();
+          } );
     }
 }

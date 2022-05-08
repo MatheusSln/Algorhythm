@@ -9,6 +9,7 @@ import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-login',
@@ -31,7 +32,8 @@ export class LoginComponent implements OnInit {
               private accountService: AccountService,
               private router: Router,
               private toastr: ToastrService,
-              private modalService: NgbModal) {
+              private modalService: NgbModal,
+              private spinner: NgxSpinnerService) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -64,6 +66,8 @@ export class LoginComponent implements OnInit {
 
   login() {
       if (this.loginForm.dirty && this.loginForm.valid) {
+          this.spinner.show();
+
           this.user =  Object.assign({}, this.user, this.loginForm.value);
 
           this.accountService.login(this.user)
@@ -78,7 +82,7 @@ export class LoginComponent implements OnInit {
       this.loginForm.reset();
       this.errors = [];
       this.accountService.LocalStorage.saveLocalDataUser(response);
-
+      this.spinner.hide();
       this.toastr.success('', 'Bem vindo de volta!');
 
       this.router.navigate(['/home']);
@@ -88,7 +92,7 @@ export class LoginComponent implements OnInit {
     this.resetPasswordForm.reset();
     this.errors = [];
     this.modalService.dismissAll();
-
+    this.spinner.hide();
     this.toastr.success('E-mail com instruções enviado com sucesso', 'Recuperação de senha');
 
     this.router.navigate(['/home']);
@@ -96,6 +100,7 @@ export class LoginComponent implements OnInit {
 
   proccessFail(fail : any){
       this.errors = fail.error.errors;
+      this.spinner?.hide();
       this.modalService.dismissAll();
       this.toastr.error('Ocorreu um erro!', 'Opa :(');
   }
@@ -119,6 +124,7 @@ export class LoginComponent implements OnInit {
 
   sendPasswordReset(){
     if (this.resetPasswordForm.dirty && this.resetPasswordForm.valid) {
+      this.spinner.show();
         this.accountService.sendResetPasswordEmail(this.resetPasswordForm.value.email)
         .subscribe(
           () => {this.proccessSuccessResetPassword()},
