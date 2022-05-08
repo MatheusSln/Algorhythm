@@ -2,6 +2,7 @@
 using Algorhythm.Business.Models;
 using Algorhythm.Data.Context;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Algorhythm.Data.Repository
@@ -12,9 +13,10 @@ namespace Algorhythm.Data.Repository
         {
         }
 
-        public Task DeleteAllExerciseByUser(Guid UserId)
+        public async Task DeleteExerciseUser(List<ExerciseUser> exerciseUser)
         {
-            throw new NotImplementedException();
+            Db.ExerciseUsers.RemoveRange(exerciseUser);
+            await SaveChanges();
         }
     }
 }

@@ -7,6 +7,8 @@ import { FooterComponent } from "./footer/footer.component";
 import { NotFoundComponent } from "./not-found/not-found.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { MenuLoginComponent } from "./menu-login/menu-login.component";
+import { AccountService } from "../account/services/account.service";
+import { HttpClientModule } from "@angular/common/http";
 
 @NgModule({
     declarations: [
@@ -19,7 +21,8 @@ import { MenuLoginComponent } from "./menu-login/menu-login.component";
     imports:[
         CommonModule,
         RouterModule,
-        NgbModule
+        NgbModule,
+        HttpClientModule
     ],
     exports: [
         MenuComponent,
@@ -27,6 +30,9 @@ import { MenuLoginComponent } from "./menu-login/menu-login.component";
         HomeComponent,
         FooterComponent,
         NotFoundComponent        
+    ],
+    providers:[
+        AccountService
     ]
 })
 export class NavigationModule{}

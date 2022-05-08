@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { map, catchError } from 'rxjs/operators';
 import { BaseService } from "src/app/services/base.service";
 import { ChangePassword } from "../models/changePassword";
+import { Modules } from "../models/modules";
 import { User } from "../models/user";
 
 
@@ -87,5 +88,25 @@ export class AccountService extends BaseService{
             catchError(this.serviceError));
 
     return response; 
+    }
+
+    getModulesByUser(userId: string) : Observable<Modules[]>{
+        let response = this.http
+        .get<Modules[]>(this.UrlServiceV1 + 'user/modules?userId=' + userId, this.GetHeaderJson())
+        .pipe(
+            map(this.extractData),
+            catchError(super.serviceError));
+
+        return response;
+    }
+
+    restartModuleByUser(module: number, userId: string){
+        let response = this.http
+        .delete(this.UrlServiceV1 + 'user/restart?userId=' + userId + "&moduleId=" + module, this.GetHeaderJson())
+        .pipe(
+            map(this.extractData),
+            catchError(this.serviceError));
+
+    return response;         
     }
 }

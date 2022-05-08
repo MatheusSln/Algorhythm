@@ -113,4 +113,17 @@
         </div>                                              
     </div>
 </div>
+
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Reinicar Módulo</h4>
+        <button type="button" class="close" aria-label="Close" (click)="d('')">
+            <span aria-hidden="true">&times;</span>
+          </button>
+    </div>
+         <p class="ml-2">Você já finalizou este módulo, para realizá-lo todas as questões deverão ser respondidas novamente.</p>
+         <p class="ml-2">Tem certeza ?</p>
+
+          <button type="button" class="btn btn-primary" (click)="restartModule()">Reiniciar</button>    
+</ng-template>
 <!-- Fim Content -->

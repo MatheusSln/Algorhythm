@@ -21,7 +21,7 @@ import { AccountService } from "../services/account.service";
         .subscribe(
           users => this.users = users,
           
-          error => this.errorMessage);
+          error => this.errorMessage = error);
   
         setTimeout(()=> {
           this.spinner.hide();

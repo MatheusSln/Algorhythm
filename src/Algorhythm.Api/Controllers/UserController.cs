@@ -2,6 +2,7 @@
 using Algorhythm.Api.Dtos.User;
 using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
+using Algorhythm.Business.Models;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -25,6 +26,7 @@ namespace Algorhythm.Api.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IUserRepository _userRepository;
         private readonly IExerciseRepository _exerciseRepository;
+        private readonly IExerciseUserRepository _exerciseUserRepository;
         private readonly IModuleRepository _moduleRepository;
         private readonly IMapper _mapper;
         private readonly IUserService _userService;
@@ -40,7 +42,8 @@ namespace Algorhythm.Api.Controllers
                               IMapper mapper,
                               IEmailSender emailSender,
                               IExerciseRepository exerciseRepository,
-                              IModuleRepository moduleRepository) :
+                              IModuleRepository moduleRepository,
+                              IExerciseUserRepository exerciseUserRepository) :
             base(notifier)
         {
             _userManager = userManager;
@@ -51,6 +54,7 @@ namespace Algorhythm.Api.Controllers
             _emailSender = emailSender;
             _exerciseRepository = exerciseRepository;
             _moduleRepository = moduleRepository;
+            _exerciseUserRepository = exerciseUserRepository;
         }
 
         [HttpGet]
@@ -95,9 +99,9 @@ namespace Algorhythm.Api.Controllers
         [HttpPut]
         public async Task<ActionResult> UpdateUser(UpdateUserDto userDto)
         {
-            if (!ModelState.IsValid) 
+            if (!ModelState.IsValid)
                 return CustomResponse(ModelState);
-            
+
             var user = await _userRepository.GetById(userDto.Id);
 
             if (user == null)
@@ -163,7 +167,7 @@ namespace Algorhythm.Api.Controllers
 
             return CustomResponse();
         }
-        
+
         [Route("changepassword")]
         [HttpPost]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto dto)
@@ -208,7 +212,7 @@ namespace Algorhythm.Api.Controllers
 
             var user = await _userManager.FindByEmailAsync(email);
 
-            if(user is null)
+            if (user is null)
             {
                 NotifyError("Nenhum usuário encontrado com o e-mail informado");
                 return CustomResponse();
@@ -254,6 +258,26 @@ namespace Algorhythm.Api.Controllers
             }
 
             return CustomResponse(result);
+        }
+
+        [HttpDelete("restart")]
+        public async Task<IActionResult> RestartModule(Guid userId, int moduleId)
+        {
+            var user = await _userRepository.GetValidUser(userId);
+
+            if (user is null)
+            {
+                NotifyError("Usuário não encontrado");
+                NotFound();
+            }
+
+            var exerciseUser = await _exerciseRepository.GetExercisesPerformedByUser(userId);
+
+            var exerciseToDelete = exerciseUser.Where(w => w.ModuleId == moduleId).ToList();
+
+            await _exerciseUserRepository.DeleteExerciseUser(exerciseToDelete.Select(s => new ExerciseUser { ExercisesId = s.Id, UsersId = user.Id }).ToList());
+
+            return CustomResponse();
         }
 
         private async Task<LoginResponseDto> GerarJwt(string email)
@@ -310,7 +334,7 @@ namespace Algorhythm.Api.Controllers
             return response;
         }
 
-        private string GetValidToken(string token)  => HttpUtility.UrlDecode(token).Replace(" ", "+");
+        private string GetValidToken(string token) => HttpUtility.UrlDecode(token).Replace(" ", "+");
 
         private static long ToUnixEpochDate(DateTime date)
             => (long)Math.Round((date.ToUniversalTime() - new DateTimeOffset(1970, 1, 1, 0, 0, 0, TimeSpan.Zero)).TotalSeconds);
