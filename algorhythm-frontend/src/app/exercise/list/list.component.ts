@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
+import { ToastrService } from 'ngx-toastr';
 import { Exercise } from '../models/exercise';
 import { ExerciseService } from '../services/exercise.service';
 
@@ -12,7 +14,7 @@ export class ListComponent implements OnInit {
   public exercises: Exercise[];
   errorMessage: string;
 
-  constructor(private exerciseService: ExerciseService, private spinner: NgxSpinnerService) { }
+  constructor(private exerciseService: ExerciseService, private spinner: NgxSpinnerService, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
     this.spinner.show();
@@ -25,7 +27,9 @@ export class ListComponent implements OnInit {
         },
         error => {
           this.spinner.hide(),
-          this.errorMessage = error
+          this.errorMessage = error,
+          this.toastr.error("Algo deu errado :/", "Erro"),
+          this.router.navigate(['/home']);
         });
   }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
 import { NgxSpinnerService } from "ngx-spinner";
+import { ToastrService } from "ngx-toastr";
 import { User } from "../models/user";
 import { AccountService } from "../services/account.service";
 
@@ -12,7 +14,7 @@ import { AccountService } from "../services/account.service";
     public users: User[];
     errorMessage: string;
 
-    constructor(private accountService: AccountService, private spinner: NgxSpinnerService) { }
+    constructor(private accountService: AccountService, private spinner: NgxSpinnerService, private toastr: ToastrService, private router: Router) { }
 
     ngOnInit(): void {
       this.spinner.show();
@@ -26,7 +28,9 @@ import { AccountService } from "../services/account.service";
           
           error =>{
             this.errorMessage = error,
-            this.spinner.hide();
+            this.spinner.hide(),
+            this.toastr.error("Algo deu errado :/", "Erro"),
+            this.router.navigate(['/home']);
           } );
     }
 }
