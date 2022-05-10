@@ -1,8 +1,10 @@
 ﻿using Algorhythm.Api.Dtos;
+using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Enum;
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Algorhythm.Api.Controllers
 {
+    [Authorize]
     [Route("api/exercises")]
     public class ExercisesController : MainController
     {
@@ -42,12 +45,14 @@ namespace Algorhythm.Api.Controllers
             _exerciseUserRepository = exerciseUserRepository;
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpGet]
         public async Task<IEnumerable<ExerciseDto>> GetAll()
         {
             return _mapper.Map<IEnumerable<ExerciseDto>>(await _exerciseRepository.GetAllExercisesAndAlternatives());
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ExerciseDto>> GetbyId([FromRoute] Guid id)
         {
@@ -61,6 +66,7 @@ namespace Algorhythm.Api.Controllers
             return exercise;
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpPost]
         public async Task<ActionResult<ExerciseDto>> Add(ExerciseDto exerciseDto)
         {
@@ -78,6 +84,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(exerciseDto);
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpPut]
         public async Task<ActionResult<ExerciseDto>> Update(ExerciseDto exerciseDto)
         {
@@ -94,6 +101,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(exerciseDto);
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [Route("alternative")] 
         [HttpPut]
         public async Task<ActionResult<AlternativeDto>> UpdateAlternative(AlternativeDto alternativeDto)
@@ -108,6 +116,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(alternativeDto);
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [Route("delete")]
         [HttpPut]
         public async Task<ActionResult> Delete(ExerciseDto exerciseDto)

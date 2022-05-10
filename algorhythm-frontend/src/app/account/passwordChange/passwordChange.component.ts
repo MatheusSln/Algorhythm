@@ -93,7 +93,7 @@ export class PasswordChangeComponent implements OnInit, AfterViewInit {
     proccessSuccess(){
         this.changePasswordForm.reset();
         this.errors = [];
-  
+        this.accountService.LocalStorage.cleanLocalDataUser();
         this.toastr.success('Sua senha foi alterada!', 'Sucesso!');  
 
         this.router.navigate(['/account/login']);

@@ -3,6 +3,7 @@ using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -18,6 +19,7 @@ using System.Web;
 
 namespace Algorhythm.Api.Controllers
 {
+    [Authorize]
     [Route("api")]
     public class AuthController : MainController
     {
@@ -47,6 +49,7 @@ namespace Algorhythm.Api.Controllers
             _emailSender = emailSender;
         }
 
+        [AllowAnonymous]
         [HttpPost("nova-conta")]
         public async Task<ActionResult> Register(RegisterUserDto registerUser)
         {
@@ -89,6 +92,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(registerUser);
         }
 
+        [AllowAnonymous]
         [HttpPost("entrar")]
         public async Task<ActionResult> Login(LoginUserDto loginUser)
         {            
@@ -132,6 +136,20 @@ namespace Algorhythm.Api.Controllers
 
             NotifyError("Usuário ou Senha incorretos");
             return CustomResponse(loginUser);
+        }
+
+        [HttpGet("refreshtoken")]
+        public async Task<ActionResult> RefreshToken(string userEmail)
+        {
+            if (userEmail == null)
+            {
+                NotifyError("e-mail não pode ser nulo");
+                return CustomResponse();
+            }
+
+            var loginToken = await GerarJwt(userEmail);
+
+            return CustomResponse(loginToken);
         }
 
         private async Task<LoginResponseDto> GerarJwt(string email)

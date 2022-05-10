@@ -18,6 +18,16 @@ export abstract class BaseService{
         };
     }
 
+    protected GetHeaderAuthJson() {
+        return {
+            headers: new HttpHeaders({
+                'Content-Type': 'application/json',
+                'Access-Control-Allow-Origin': '*',
+                'Authorization': `Bearer ${this.LocalStorage.getTokenUser()}`
+            })
+        };
+    }
+
     protected extractData(response: any){
         return response.data || {};
     }

@@ -16,6 +16,7 @@ import { ExerciseService } from "./services/exercise.service";
 import { UpdateComponent } from "./update/update.component";
 import { PerformComponent } from './perform/perform.component';
 import { PerformResolve } from "./services/perform.resolve";
+import { AccountService } from "../account/services/account.service";
 
 @NgModule({
     declarations: [
@@ -31,12 +32,12 @@ import { PerformResolve } from "./services/perform.resolve";
         ExerciseRoutingModule,
         FormsModule,
         ReactiveFormsModule,
-        HttpClientModule,
         CustomFormsModule,
         NgxSpinnerModule
     ],
     providers: [
       ExerciseService,
+      AccountService,
       ExerciseResolve,
       PerformResolve
     ]

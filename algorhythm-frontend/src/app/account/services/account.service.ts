@@ -34,7 +34,7 @@ export class AccountService extends BaseService{
 
     updateUser(user: User) : Observable<User>{
         let response = this.http
-        .put(this.UrlServiceV1 + 'user', user, this.GetHeaderJson())
+        .put(this.UrlServiceV1 + 'user', user, this.GetHeaderAuthJson())
         .pipe(
             map(this.extractData),
             catchError(this.serviceError));
@@ -44,7 +44,7 @@ export class AccountService extends BaseService{
 
     blockUser(user: User) : Observable<User>{
         let response = this.http
-        .put(this.UrlServiceV1 + 'user/block', user, this.GetHeaderJson())
+        .put(this.UrlServiceV1 + 'user/block', user, this.GetHeaderAuthJson())
         .pipe(
             map(this.extractData),
             catchError(this.serviceError));
@@ -54,13 +54,13 @@ export class AccountService extends BaseService{
 
     getAll() : Observable<User[]>{
         return this.http
-        .get<User[]>(this.UrlServiceV1 + "user", this.GetHeaderJson())
+        .get<User[]>(this.UrlServiceV1 + "user", this.GetHeaderAuthJson())
         .pipe(catchError(super.serviceError));
     }
 
     getById(id: string): Observable<User> {
         return this.http
-            .get<User>(this.UrlServiceV1 + "user/" + id)
+            .get<User>(this.UrlServiceV1 + "user/" + id, this.GetHeaderAuthJson())
             .pipe(catchError(super.serviceError));
     }
 
@@ -92,7 +92,7 @@ export class AccountService extends BaseService{
 
     getModulesByUser(userId: string) : Observable<Modules[]>{
         let response = this.http
-        .get<Modules[]>(this.UrlServiceV1 + 'user/modules?userId=' + userId, this.GetHeaderJson())
+        .get<Modules[]>(this.UrlServiceV1 + 'user/modules?userId=' + userId, this.GetHeaderAuthJson())
         .pipe(
             map(this.extractData),
             catchError(super.serviceError));
@@ -102,11 +102,20 @@ export class AccountService extends BaseService{
 
     restartModuleByUser(module: number, userId: string){
         let response = this.http
-        .delete(this.UrlServiceV1 + 'user/restart?userId=' + userId + "&moduleId=" + module, this.GetHeaderJson())
+        .delete(this.UrlServiceV1 + 'user/restart?userId=' + userId + "&moduleId=" + module, this.GetHeaderAuthJson())
         .pipe(
             map(this.extractData),
             catchError(this.serviceError));
 
     return response;         
     }
+
+    refreshToken(userEmail: string){
+        return this.http
+            .get<any>(this.UrlServiceV1 + "refreshtoken?userEmail=" + userEmail, this.GetHeaderAuthJson())
+            .pipe(
+                map(this.extractData),
+                catchError(super.serviceError)
+            )
+    }    
 }

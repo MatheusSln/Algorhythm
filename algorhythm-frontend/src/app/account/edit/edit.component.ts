@@ -3,6 +3,7 @@ import { FormBuilder, FormControlName, FormGroup, Validators } from "@angular/fo
 import { Router } from "@angular/router";
 import { CustomValidators } from '@narik/custom-validators';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
 import { DisplayMessage, GenericValidator, ValidationMessages } from "src/app/utils/generic-form-validation";
 import { LocalStorageUtils } from "src/app/utils/localstorage";
@@ -37,7 +38,8 @@ export class UserEditComponent implements OnInit{
         private accountService: AccountService,
         private router: Router,
         private toastr: ToastrService,
-        private modalService: NgbModal) {
+        private modalService: NgbModal,
+        private spinner: NgxSpinnerService) {
           this.validationMessage= {
             email: {
               required: 'Informe o e-mail',
@@ -94,7 +96,7 @@ export class UserEditComponent implements OnInit{
         if (this.editForm.dirty && this.editForm.valid) {
             this.userUpdate = Object.assign({}, this.userUpdate, this.editForm.value);
             this.userUpdate.id = this.user.id;
-
+            this.spinner.show();
             this.accountService.updateUser(this.userUpdate)          
                 .subscribe(
                 success => { this.proccessSuccess(success) },
@@ -106,6 +108,7 @@ export class UserEditComponent implements OnInit{
     }
 
     proccessSuccess(response) {
+        this.spinner.hide();
         this.editForm.reset();
         this.errors = [];
         this.accountService.LocalStorage.saveLocalDataUser(response);
@@ -115,11 +118,25 @@ export class UserEditComponent implements OnInit{
       }
     
       proccessFail(fail: any) {
+        this.spinner.hide();
         this.errors = fail.error.errors;
         this.toastr.error('Ocorreu um erro!', 'Opa :(');
       }    
 
     sendMailPassword(){
-        
+      this.spinner.show();
+        this.accountService.sendResetPasswordEmail(this.user.email)
+          .subscribe(
+            () =>{
+              this.spinner.hide();
+              this.toastr.info("E-mail com instruções para troca de senha enviado", "E-mail enviado!");
+              this.modalService.dismissAll();
+            },
+            fail =>{
+              this.spinner.hide();
+              this.errors = fail.error.errors;
+              this.toastr.error('Ocorreu um erro!', 'Opa :(');
+            }
+          )
     }
 }

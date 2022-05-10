@@ -10,6 +10,7 @@ import { MenuLoginComponent } from "./menu-login/menu-login.component";
 import { AccountService } from "../account/services/account.service";
 import { HttpClientModule } from "@angular/common/http";
 import { NgxSpinner, NgxSpinnerModule } from "ngx-spinner";
+import { AccessDeniedComponent } from "./access-denied/access-denied.component";
 
 @NgModule({
     declarations: [
@@ -17,7 +18,8 @@ import { NgxSpinner, NgxSpinnerModule } from "ngx-spinner";
         MenuLoginComponent,
         HomeComponent,
         FooterComponent,
-        NotFoundComponent
+        NotFoundComponent,
+        AccessDeniedComponent
     ],
     imports:[
         CommonModule,

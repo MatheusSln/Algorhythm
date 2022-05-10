@@ -29,8 +29,7 @@ import { AccountService } from "../services/account.service";
           error =>{
             this.errorMessage = error,
             this.spinner.hide(),
-            this.toastr.error("Algo deu errado :/", "Erro"),
-            this.router.navigate(['/home']);
+            this.toastr.error("Algo deu errado :/", "Erro")
           } );
     }
 }

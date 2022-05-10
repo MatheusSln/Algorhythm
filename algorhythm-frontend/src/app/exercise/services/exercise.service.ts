@@ -13,7 +13,7 @@ export class ExerciseService extends BaseService {
 
     createExercise(exercise: Exercise): Observable<Exercise> {
         let response = this.http
-            .post(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
+            .post(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));
@@ -23,7 +23,7 @@ export class ExerciseService extends BaseService {
 
     updateExercise(exercise: Exercise): Observable<Exercise> {
         let response = this.http
-            .put(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderJson())
+            .put(this.UrlServiceV1 + 'exercises', exercise, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));
@@ -33,7 +33,7 @@ export class ExerciseService extends BaseService {
 
     deleteExercise(exercise: Exercise): Observable<Exercise> {
         let response = this.http
-            .put(this.UrlServiceV1 + 'exercises/delete', exercise, this.GetHeaderJson())
+            .put(this.UrlServiceV1 + 'exercises/delete', exercise, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));
@@ -42,7 +42,7 @@ export class ExerciseService extends BaseService {
     }
     updateAlternative(alternative: Alternative): Observable<Alternative> {
         let response = this.http
-            .put(this.UrlServiceV1 + 'exercises/alternative', alternative, this.GetHeaderJson())
+            .put(this.UrlServiceV1 + 'exercises/alternative', alternative, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));
@@ -52,25 +52,25 @@ export class ExerciseService extends BaseService {
 
     getAll(): Observable<Exercise[]> {
         return this.http
-            .get<Exercise[]>(this.UrlServiceV1 + "exercises", this.GetHeaderJson())
+            .get<Exercise[]>(this.UrlServiceV1 + "exercises", this.GetHeaderAuthJson())
             .pipe(catchError(super.serviceError));
     }
 
     getById(id: string): Observable<Exercise> {
         return this.http
-            .get<Exercise>(this.UrlServiceV1 + "exercises/" + id)
+            .get<Exercise>(this.UrlServiceV1 + "exercises/" + id, this.GetHeaderAuthJson())
             .pipe(catchError(super.serviceError));
     }
 
     getExerciseToDoByModuleAndUser(moduleId: number, userId: string) {
         return this.http
-            .get<Exercise>(this.UrlServiceV1 + "exercises/exercisestodo?moduleId=" + moduleId + "&userId=" + userId)
+            .get<Exercise>(this.UrlServiceV1 + "exercises/exercisestodo?moduleId=" + moduleId + "&userId=" + userId, this.GetHeaderAuthJson())
             .pipe(catchError(super.serviceError));
     }
 
     verifyAnswer(answer: string, exerciseId: string, userId: string) {
         let response = this.http
-            .post(this.UrlServiceV1 + 'exercises/verifyanswer',{answer : answer, exerciseId: exerciseId, userId: userId}, this.GetHeaderJson())
+            .post(this.UrlServiceV1 + 'exercises/verifyanswer',{answer : answer, exerciseId: exerciseId, userId: userId}, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(this.serviceError));

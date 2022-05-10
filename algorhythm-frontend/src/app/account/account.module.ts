@@ -40,7 +40,6 @@ import { ChangePasswordResolve } from './services/changePassword.resolve';
     AccountRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpClientModule,
     CustomFormsModule,
     NgxSpinnerModule
   ],

@@ -28,8 +28,7 @@ export class ListComponent implements OnInit {
         error => {
           this.spinner.hide(),
           this.errorMessage = error,
-          this.toastr.error("Algo deu errado :/", "Erro"),
-          this.router.navigate(['/home']);
+          this.toastr.error("Algo deu errado :/", "Erro")
         });
   }
 }

@@ -3,6 +3,7 @@ import { FormBuilder, FormControlName, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToastrService } from 'ngx-toastr';
+import { AccountService } from 'src/app/account/services/account.service';
 import { LocalStorageUtils } from 'src/app/utils/localstorage';
 import { Exercise } from '../models/exercise';
 import { ExerciseService } from '../services/exercise.service';
@@ -36,6 +37,7 @@ export class PerformComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private exerciseService: ExerciseService,
+    private accountService: AccountService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService
   ) {
@@ -61,6 +63,9 @@ export class PerformComponent implements OnInit {
             this.proccessFail(fail);
           }
         );
+    } else {
+      this.localStorage.cleanLocalDataUser();
+      this.router.navigate(['account/login']);
     }
 
     this.spinner.hide();
@@ -68,8 +73,18 @@ export class PerformComponent implements OnInit {
 
   proccessSuccess(data: any) {
     if (data == null) {
-      this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
-      this.router.navigate(['/home']);
+      this.accountService.refreshToken(this.user.email).subscribe(
+        (data) => {
+          this.accountService.LocalStorage.cleanLocalDataUser();
+          this.accountService.LocalStorage.saveLocalDataUser(data);
+          this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
+          this.router.navigate(['/home']);          
+        },
+        () => {
+          this.toastr.error('Ocorreu um erro!', 'Opa :(');
+          this.router.navigate(['/home']);
+        }
+      );
     }
 
     this.exercise = data;
@@ -127,8 +142,7 @@ export class PerformComponent implements OnInit {
             this.spinner.hide();
         },
         (fail) => {
-          this.proccessFail(fail),
-          this.spinner.hide();
+          this.proccessFail(fail), this.spinner.hide();
         }
       );
   }

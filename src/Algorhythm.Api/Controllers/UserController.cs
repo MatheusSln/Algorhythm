@@ -4,6 +4,7 @@ using Algorhythm.Api.Extensions;
 using Algorhythm.Business.Interfaces;
 using Algorhythm.Business.Models;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -20,6 +21,7 @@ using System.Web;
 
 namespace Algorhythm.Api.Controllers
 {
+    [Authorize]
     [Route("api/user")]
     public class UserController : MainController
     {
@@ -57,6 +59,7 @@ namespace Algorhythm.Api.Controllers
             _exerciseUserRepository = exerciseUserRepository;
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpGet]
         public async Task<IEnumerable<UserDto>> GetAll()
         {
@@ -65,6 +68,7 @@ namespace Algorhythm.Api.Controllers
             return users;
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<UserDto>> GetById([FromRoute] Guid id)
         {
@@ -78,6 +82,7 @@ namespace Algorhythm.Api.Controllers
             return user;
         }
 
+        [ClaimsAuthorize("Admin", "Admin")]
         [HttpPut("block")]
         public async Task<ActionResult> BlockUser(UpdateUserDto userDto)
         {
@@ -139,6 +144,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse(await GerarJwt(userDto.Email));
         }
 
+        [AllowAnonymous]
         [Route("confirm")]
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string token, string email)
@@ -168,6 +174,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse();
         }
 
+        [AllowAnonymous]
         [Route("changepassword")]
         [HttpPost]
         public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordDto dto)
@@ -200,6 +207,7 @@ namespace Algorhythm.Api.Controllers
             return CustomResponse();
         }
 
+        [AllowAnonymous]
         [Route("resetSend")]
         [HttpPost()]
         public async Task<IActionResult> SendPasswordResetEmail([FromBody] string email)
