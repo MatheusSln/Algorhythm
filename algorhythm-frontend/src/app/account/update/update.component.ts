@@ -104,6 +104,7 @@ export class UserUpdateComponent implements OnInit {
   }
 
   blockAccount() {
+    this.spinner.show();
     this.modalService.dismissAll();
 
     if (this.updateForm.valid) {
@@ -113,6 +114,14 @@ export class UserUpdateComponent implements OnInit {
         this.updateForm.value
       );
       this.userUpdate.id = this.user.id;
+
+      let loggedUser = this.accountService.LocalStorage.getUser();
+
+      if (loggedUser.id == this.user.id){
+        this.toastr.info("Esta conta não pode ser bloqueada, pois é a mesma que está logada", "Operação não realizada");
+        this.spinner.hide();      
+        return;
+      }
 
       this.accountService.blockUser(this.userUpdate).subscribe(
         () => {
@@ -128,6 +137,7 @@ export class UserUpdateComponent implements OnInit {
   }
 
   proccessSuccess(info: string) {
+    this.spinner.hide();
     this.updateForm.reset();
     this.errors = [];
     this.toastr.success(info, 'Sucesso!');
@@ -136,6 +146,7 @@ export class UserUpdateComponent implements OnInit {
   }
 
   proccessFail(fail: any) {
+    this.spinner.hide();
     this.errors = fail.error.errors;
     this.toastr.error('Ocorreu um erro!', 'Opa :(');
   }
@@ -170,6 +181,7 @@ export class UserUpdateComponent implements OnInit {
 
   editAccount() {
     if (this.updateForm.dirty && this.updateForm.valid) {
+      this.spinner.show();
       this.userUpdate = Object.assign(
         {},
         this.userUpdate,

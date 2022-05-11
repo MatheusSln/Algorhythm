@@ -31,6 +31,10 @@ export class ErrorInterceptor implements HttpInterceptor {
           if (error.status === 403) {
             this.router.navigate(['/access-denied']);
           }
+
+          if(error.status != 401 && error.status != 403){
+            this.router.navigate(['/home']);
+          }
         }
 
         return throwError(error);
