@@ -17,6 +17,7 @@ import { UpdateComponent } from "./update/update.component";
 import { PerformComponent } from './perform/perform.component';
 import { PerformResolve } from "./services/perform.resolve";
 import { AccountService } from "../account/services/account.service";
+import { PerformGuard } from "./services/perform.guard";
 
 @NgModule({
     declarations: [
@@ -39,7 +40,8 @@ import { AccountService } from "../account/services/account.service";
       ExerciseService,
       AccountService,
       ExerciseResolve,
-      PerformResolve
+      PerformResolve,
+      PerformGuard
     ]
   })
   export class ExerciseModule { }

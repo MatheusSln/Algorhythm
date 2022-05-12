@@ -1,28 +1,28 @@
-import { Component, OnInit } from "@angular/core";
-import { LocalStorageUtils } from "src/app/utils/localstorage";
+import { Component, OnInit } from '@angular/core';
+import { LocalStorageUtils } from 'src/app/utils/localstorage';
 
 @Component({
-    selector: 'app-menu',
-    templateUrl: './menu.component.html'
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
 })
 export class MenuComponent implements OnInit {
-    public isCollapsed: boolean;
+  public isCollapsed: boolean;
 
-    localStorageUtils = new LocalStorageUtils();
-    user: any;
-    isAdmin : boolean = false;
+  localStorageUtils = new LocalStorageUtils();
+  user: any;
+  isAdmin: boolean = false;
 
-    constructor() {
-      this.isCollapsed = true;
-    }
+  constructor() {
+    this.isCollapsed = true;
+  }
 
-    ngOnInit(): void {
-       this.user = this.localStorageUtils.getUser();
+  ngOnInit(): void {
+    this.user = this.localStorageUtils.getUser();
 
-       if (this.user && this.user.claims.find(
-        (element) => element.type == 'Admin'
-      ).value == "Admin"){
+    if (this.user) {
+      if (this.user.claims.find((element) => element.type == 'Admin') != undefined) {
         this.isAdmin = true;
-       }
+      }
     }
+  }
 }
