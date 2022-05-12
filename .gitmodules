@@ -1,0 +1,3 @@
+[submodule "src/algorhythm-service"]
+	path = src/algorhythm-service
+	url = https://github.com/MatheusSln/algorhythm-service.git
