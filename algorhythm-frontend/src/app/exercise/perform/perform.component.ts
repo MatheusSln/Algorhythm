@@ -32,6 +32,8 @@ export class PerformComponent implements OnInit {
 
   radio: string;
 
+  canExit: boolean = false;
+
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -73,6 +75,7 @@ export class PerformComponent implements OnInit {
 
   proccessSuccess(data: any) {
     if (data == null) {
+      this.canExit = true;
       this.accountService.refreshToken(this.user.email).subscribe(
         (data) => {
           this.accountService.LocalStorage.cleanLocalDataUser();

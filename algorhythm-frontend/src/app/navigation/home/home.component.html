@@ -1,29 +1,28 @@
 <!-- Page Content -->
-
+<body class="bg-primary">
 <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#00b9ff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>  
 
-<header class="bg-primary py-5 mb-5">
+<header class="bg-primary py-4 mb-4">
     <div class="container h-100">
         <div class="row h-100 align-items-center">
             <div class="col-lg-10">
                 <h1 class="display-5 text-white mt-5 mb-2">Algorhythm - Aplicativo para ensino introdutório sobre <u>algoritmos</u> e <u>lógica de programação</u>.</h1>
-                <p class="lead mb-5 text-white">Você está pronto para aprender?</p>
             </div>
         </div>
     </div>
 </header>
 
-<div class="container main-container">
+<div class="bg-primary container main-container">
     <div class="row text-center">
 
-        <div class="col-lg-3 col-md-6 mb-4">
+        <div class="col-lg-3 col-md-6 mb-4" >
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Introdução a Algoritmos</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Aprenda a introdução sobre algoritmos e entenda o que é e para o que é usado na programação.</p>
                 </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(1)" (click)="access(1)">Entrar</button>
+                <div class="card-footer" id="step1" data-intro='Teste intro!!'>
+                    <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(1)" (click)="access(1)" >Entrar</button>
                     <button type="button" class="btn btn-primary" *ngIf="!loggedUser()" [routerLink]="['/account/login']">Saiba mais</button>
                 </div>
             </div>
@@ -33,7 +32,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Operadores de atribuição</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sapiente esse necessitatibus neque.</p>
+                    <p class="card-text">Entenda como funcionam os operadores de atribuição e como utilizá-los.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(2)" (click)="access(2)">Entrar</button>
@@ -46,7 +45,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Operadores aritméticos</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam os operadores aritméticos e como utilizá-los.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(3)" (click)="access(3)">Entrar</button>
@@ -58,7 +57,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Operadores de incremento e decremento</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam os operadores de incremento e decremento e como utilizá-los.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(4)" (click)="access(4)">Entrar</button>
@@ -70,7 +69,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Operadores lógicos e relacionais</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam os operadores lógicos e relacionais e como utilizá-los.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(5)" (click)="access(5)">Entrar</button>
@@ -82,7 +81,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Operações de entrada e saída</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam as operações de entrada e saída e como utilizá-las.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(6)" (click)="access(6)">Entrar</button>
@@ -94,7 +93,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Estruturas condicionais</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam as estruturas condicionais e como utilizá-las.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(7)" (click)="access(7)">Entrar</button>
@@ -106,7 +105,7 @@
             <div class="card h-100">
                 <div class="card-body">
                     <h4 class="card-title">Estruturas de repetição</h4>
-                    <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo magni sapiente, tempore debitis beatae culpa natus architecto.</p>
+                    <p class="card-text">Entenda como funcionam as estruturas de repetição e como utilizá-las.</p>
                 </div>
                 <div class="card-footer">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(8)" (click)="access(8)">Entrar</button>
@@ -129,4 +128,5 @@
 
           <button type="button" class="btn btn-primary" (click)="restartModule()">Reiniciar</button>    
 </ng-template>
+</body>
 <!-- Fim Content -->

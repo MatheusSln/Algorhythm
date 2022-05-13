@@ -85,7 +85,7 @@ export class LoginComponent implements OnInit {
       this.spinner.hide();
       this.toastr.success('', 'Bem vindo de volta!');
 
-      this.router.navigate(['/home']);
+      location.assign('/home');
   }
 
   proccessSuccessResetPassword(){

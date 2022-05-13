@@ -10,8 +10,12 @@ export class PerformGuard implements CanDeactivate<PerformComponent> {
   constructor(private router: Router) {}
 
   canDeactivate(component: PerformComponent) {
-    return window.confirm(
-      'Tem certeza que deseja abandonar a realização do módulo?'
-    );
+    if(!component.canExit){
+      return window.confirm(
+        'Tem certeza que deseja abandonar a realização do módulo?'
+      );
+    }
+
+    return true;
   }
 }

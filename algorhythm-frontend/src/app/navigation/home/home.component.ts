@@ -7,6 +7,7 @@ import { Modules } from 'src/app/account/models/modules';
 import { AccountService } from 'src/app/account/services/account.service';
 import { Level } from 'src/app/utils/levelEnum';
 import { LocalStorageUtils } from 'src/app/utils/localstorage';
+import * as introJs from 'intro.js/intro.js';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,8 @@ import { LocalStorageUtils } from 'src/app/utils/localstorage';
 })
 export class HomeComponent implements OnInit {
   @ViewChild('content') modalContent: TemplateRef<any>;
+
+ introJS = introJs();
 
   token: string = '';
   user: any;
@@ -56,6 +59,8 @@ export class HomeComponent implements OnInit {
     }
 
     this.spinner.hide();
+
+    this.introJS.start();
   }
 
   loggedUser(): boolean {
@@ -114,4 +119,5 @@ export class HomeComponent implements OnInit {
         );
     }
   }
+
 }
