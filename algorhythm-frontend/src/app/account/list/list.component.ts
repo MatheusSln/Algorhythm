@@ -10,8 +10,7 @@ import { AccountService } from '../services/account.service';
 
 @Component({
   selector: 'app-list-user',
-  templateUrl: './list.component.html',
-  providers: [DecimalPipe],
+  templateUrl: './list.component.html'
 })
 export class UserListComponent implements OnInit {
   public users: User[];
@@ -24,8 +23,7 @@ export class UserListComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private spinner: NgxSpinnerService,
-    private toastr: ToastrService,
-    private pipe: DecimalPipe
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -33,12 +31,12 @@ export class UserListComponent implements OnInit {
 
     this.accountService.getAll().subscribe(
       (users) => {
-        (this.users = users), 
-        this.spinner.hide(),
-        (this.users$ = this.filter.valueChanges.pipe(
-          startWith(''),
-          map((text) => this.search(text, this.pipe))
-        ));
+        (this.users = users),
+          this.spinner.hide(),
+          (this.users$ = this.filter.valueChanges.pipe(
+            startWith(''),
+            map((text) => this.search(text))
+          ));
       },
 
       (error) => {
@@ -49,11 +47,13 @@ export class UserListComponent implements OnInit {
     );
   }
 
-  search(text: string, pipe: PipeTransform): User[] {
+  search(text: string): User[] {
     return this.users.filter((user) => {
       const term = text.toLowerCase();
-      return user.email.toLowerCase().includes(term)
-        || user.name.toLocaleLowerCase().includes(term);
+      return (
+        user.email.toLowerCase().includes(term) ||
+        user.name.toLocaleLowerCase().includes(term)
+      );
     });
   }
 }

@@ -11,7 +11,6 @@ import { ExerciseService } from '../services/exercise.service';
 @Component({
   selector: 'app-list',
   templateUrl: './list.component.html',
-  providers: [DecimalPipe],
 })
 export class ListComponent implements OnInit {
   public exercises: Exercise[];
@@ -24,8 +23,7 @@ export class ListComponent implements OnInit {
   constructor(
     private exerciseService: ExerciseService,
     private spinner: NgxSpinnerService,
-    private toastr: ToastrService,
-    private pipe: DecimalPipe
+    private toastr: ToastrService
   ) {}
 
   ngOnInit(): void {
@@ -37,7 +35,7 @@ export class ListComponent implements OnInit {
           (this.exercises = exercises),
           (this.exercises$ = this.filter.valueChanges.pipe(
             startWith(''),
-            map((text) => this.search(text, this.pipe))
+            map((text) => this.search(text))
           ));
       },
       (error) => {
@@ -48,10 +46,11 @@ export class ListComponent implements OnInit {
     );
   }
 
-  search(text: string, pipe: PipeTransform): Exercise[] {
+  search(text: string): Exercise[] {
     return this.exercises.filter((exercise) => {
       const term = text.toLowerCase();
-      return exercise.question.toLowerCase().includes(term);
+      return exercise.question.toLowerCase().includes(term) ||
+            exercise.moduleId.toString().includes(term);
     });
   }
 }
