@@ -4,9 +4,15 @@
 
     <h1>Lista de Exercícios</h1>
 
-    <p>
-        <a class="btn btn-info" [routerLink]="['/exercise/create']">Novo exercício</a>
-    </p>
+    <form>
+        <div class="mb-3 row justify-content-start">
+            <div class="col-xs-3 col-sm-auto">
+                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+            </div>
+            <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label"><span class="fa fa-search"></span></label>
+          <a class="ml-auto mr-3 btn btn-info" [routerLink]="['/exercise/create']">Novo exercício</a>
+        </div>
+      </form>
 
     <table class="table table-hover">
         <thead class="thead-dark">
@@ -18,26 +24,28 @@
                 <th></th>
             </tr>
         </thead>
-        <tr *ngFor="let exercise of exercises">
+        <tr *ngFor="let exercise of exercises$ | async;">
             <td>
-                {{ exercise.moduleId }}
+                <ngb-highlight [result]="exercise.moduleId.toString()" [term]="filter.value"></ngb-highlight>
             </td>
             <td>
-                {{ exercise.question }}
+                <ngb-highlight [result]="exercise.question" [term]="filter.value"></ngb-highlight>
             </td>          
             <td>
-                {{exercise.alternatives.join(", ") }}
+                <ngb-highlight [result]="exercise.alternatives.join(', ')" [term]="filter.value"></ngb-highlight>
             </td>
             <td>
-                {{ exercise.correctAlternative }}
+                <ngb-highlight [result]="exercise.correctAlternative" [term]="filter.value"></ngb-highlight>
             </td>              
             <td>
+                <div class="d-inline-flex">
                 <a class="btn btn-warning" [routerLink]="['/exercise/update',exercise.id]">
                     <span class="fa fa-pencil"></span>
                 </a>&nbsp;
                 <a class="btn btn-danger" [routerLink]="['/exercise/delete',exercise.id]">
                     <span class="fa fa-trash"></span>
                 </a>
+                </div>
             </td>
         </tr>
     </table>

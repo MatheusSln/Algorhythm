@@ -22,6 +22,7 @@ import { ConfirmEmailResolve } from './services/confirmEmail.resolve';
 import { RegisterConfirmComponent } from './registerConfirm/registerConfirm.component';
 import { PasswordChangeComponent } from './passwordChange/passwordChange.component';
 import { ChangePasswordResolve } from './services/changePassword.resolve';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { ChangePasswordResolve } from './services/changePassword.resolve';
     FormsModule,
     ReactiveFormsModule,
     CustomFormsModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    NgbModule
   ],
   providers: [
     AccountService,

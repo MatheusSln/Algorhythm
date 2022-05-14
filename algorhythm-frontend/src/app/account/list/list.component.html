@@ -4,6 +4,15 @@
 
     <h1>Lista de usuários</h1>
 
+    <form>
+        <div class="mb-3 row justify-content-start">
+            <div class="col-xs-3 col-sm-auto">
+                <input id="table-filtering-search" class="form-control" type="text" [formControl]="filter">
+            </div>
+            <label for="table-filtering-search" class="col-xs-3 col-sm-auto col-form-label"><span class="fa fa-search"></span></label>
+        </div>
+      </form>    
+
     <table class="table table-hover">
         <thead class="thead-dark">
             <tr> 
@@ -13,15 +22,15 @@
                 <th></th>
             </tr>
         </thead>
-        <tr *ngFor="let user of users">
+        <tr *ngFor="let user of users$ | async;">
             <td>
-                {{ user.name }}
+                <ngb-highlight [result]="user.name" [term]="filter.value"></ngb-highlight>
             </td>
             <td>
-                {{ user.email }}
+                <ngb-highlight [result]="user.email" [term]="filter.value"></ngb-highlight>
             </td>          
             <td>
-                {{user.birthDate }}
+                <ngb-highlight [result]="user.birthDate | date: 'dd/MM/yyyy' " [term]="filter.value"></ngb-highlight>
             </td>              
             <td class="text-right">
                 <a class="btn btn-warning" [routerLink]="['/account/update',user.id]">

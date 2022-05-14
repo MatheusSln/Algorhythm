@@ -18,6 +18,7 @@ import { PerformComponent } from './perform/perform.component';
 import { PerformResolve } from "./services/perform.resolve";
 import { AccountService } from "../account/services/account.service";
 import { PerformGuard } from "./services/perform.guard";
+import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
     declarations: [
@@ -34,7 +35,8 @@ import { PerformGuard } from "./services/perform.guard";
         FormsModule,
         ReactiveFormsModule,
         CustomFormsModule,
-        NgxSpinnerModule
+        NgxSpinnerModule,
+        NgbModule
     ],
     providers: [
       ExerciseService,
