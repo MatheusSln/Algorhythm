@@ -139,13 +139,25 @@ namespace Algorhythm.Api.Controllers
         }
 
         [HttpGet("refreshtoken")]
-        public async Task<ActionResult> RefreshToken(string userEmail)
+        public async Task<ActionResult> RefreshToken(string userEmail, Guid userId)
         {
+
             if (userEmail == null)
             {
                 NotifyError("e-mail não pode ser nulo");
                 return CustomResponse();
             }
+
+            var user = await _userRepository.GetUserAndExercisesByEmail(userEmail);
+
+            if (user is null)
+            {
+                NotifyError("Usuário não encontrado");
+                return CustomResponse(userEmail);
+            }
+
+            if (userId != user.Id)
+                return BadRequest();
 
             var loginToken = await GerarJwt(userEmail);
 

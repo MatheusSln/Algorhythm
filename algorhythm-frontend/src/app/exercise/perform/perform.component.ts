@@ -119,7 +119,7 @@ export class PerformComponent implements OnInit {
   proccessSuccess(data: any) {
     if (data == null) {
       this.canExit = true;
-      this.accountService.refreshToken(this.user.email).subscribe(
+      this.accountService.refreshToken(this.user.email, this.user.id).subscribe(
         (data) => {
           this.accountService.LocalStorage.cleanLocalDataUser();
           this.accountService.LocalStorage.saveLocalDataUser(data);

@@ -110,9 +110,9 @@ export class AccountService extends BaseService{
     return response;         
     }
 
-    refreshToken(userEmail: string){
+    refreshToken(userEmail: string, userId: string){
         return this.http
-            .get<any>(this.UrlServiceV1 + "refreshtoken?userEmail=" + userEmail, this.GetHeaderAuthJson())
+            .get<any>(this.UrlServiceV1 + "refreshtoken?userEmail=" + userEmail + "&userId=" + userId, this.GetHeaderAuthJson())
             .pipe(
                 map(this.extractData),
                 catchError(super.serviceError)
