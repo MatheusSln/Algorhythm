@@ -60,6 +60,11 @@ export class HomeComponent implements OnInit {
           intro: 'Ao clicar em "Entrar" você inicia a realização do módulo.',
           position: 'right',
         },
+        {
+          element: '#step3',
+          intro: 'Quando finalizar o módulo anterior, o botão do módulo seguinte será desbloqueado',
+          position: 'right',
+        },        
       ],
     });
   }
@@ -97,6 +102,11 @@ export class HomeComponent implements OnInit {
   }
 
   access(module: number) {
+
+    if (this.userLevel < module){
+      return;
+    }
+
     let moduleFinished = this.modules.find(
       (element) => element.moduleId == module.toString()
     );

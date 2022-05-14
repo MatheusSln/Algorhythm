@@ -34,8 +34,9 @@
                     <h4 class="card-title">Operadores de atribuição</h4>
                     <p class="card-text">Entenda como funcionam os operadores de atribuição e como utilizá-los.</p>
                 </div>
-                <div class="card-footer">
+                <div class="card-footer" id="step3">
                     <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(2)" (click)="access(2)">Entrar</button>
+
                     <button type="button" class="btn btn-primary" *ngIf="!loggedUser()" [routerLink]="['/account/login']">Saiba mais</button>
                 </div>
             </div>
