@@ -144,6 +144,7 @@ export class PerformComponent implements OnInit {
   }
 
   proccessFail(fail: any) {
+    this.canExit = true;
     this.errors = fail.error.errors;
     this.toastr.error('Ocorreu um erro!', 'Opa :(');
     this.router.navigate(['/home']);
