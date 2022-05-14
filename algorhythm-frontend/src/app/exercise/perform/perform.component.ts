@@ -7,7 +7,8 @@ import { AccountService } from 'src/app/account/services/account.service';
 import { LocalStorageUtils } from 'src/app/utils/localstorage';
 import { Exercise } from '../models/exercise';
 import { ExerciseService } from '../services/exercise.service';
-
+import * as introJs from 'intro.js/intro.js';
+import { Level } from 'src/app/utils/levelEnum';
 @Component({
   selector: 'app-perform',
   templateUrl: './perform.component.html',
@@ -16,12 +17,15 @@ export class PerformComponent implements OnInit {
   @ViewChildren(FormControlName, { read: ElementRef })
   formInputElements: ElementRef[];
 
+  introJS = introJs();
+
   answerForm: FormGroup;
 
   errors: any[] = [];
 
   moduleId: number;
   user: any;
+  userLevel: Level;
   localStorage = new LocalStorageUtils();
 
   exercise: Exercise = new Exercise();
@@ -44,6 +48,40 @@ export class PerformComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) {
     this.moduleId = this.route.snapshot.data['number'];
+
+    this.introJS.setOptions({
+      hidePrev: true,
+      exitOnOverlayClick: false,
+      disableInteraction: true,
+      dontShowAgain: true,
+      nextLabel: 'Próximo',
+      prevLabel: 'Voltar',
+      doneLabel: 'Pronto',
+      dontShowAgainLabel: 'Não mostrar novamente',
+      steps: [
+        {
+          element: '#question',
+          intro:
+            'Aqui fica o enunciado do exercício.',
+          position: 'bottom',
+        },
+        {
+          element: '#alternatives',
+          intro: 'Aqui ficam as alternativas referente ao enunciado, basta selecionar a que você considerar correta.',
+          position: 'left',
+        },
+        {
+          element: '#verify',
+          intro: 'Ao clicar em \"Vericar\" o sistema irá validar a alternativa selecionada.',
+          position: 'left',
+        },
+        {
+          element: '#skip',
+          intro: 'Caso deseje pular a questão basta clicar em \"Pular\" e o sistema mostrará a resposta.',
+          position: 'left',
+        },        
+      ],
+    });
   }
 
   ngOnInit(): void {
@@ -55,6 +93,10 @@ export class PerformComponent implements OnInit {
         radio: [''],
       });
 
+      this.userLevel = this.user.claims.find(
+        (element) => element.type == 'level'
+      ).value;      
+
       this.exerciseService
         .getExerciseToDoByModuleAndUser(this.moduleId, this.user.id)
         .subscribe(
@@ -65,6 +107,7 @@ export class PerformComponent implements OnInit {
             this.proccessFail(fail);
           }
         );
+
     } else {
       this.localStorage.cleanLocalDataUser();
       this.router.navigate(['account/login']);
@@ -81,7 +124,7 @@ export class PerformComponent implements OnInit {
           this.accountService.LocalStorage.cleanLocalDataUser();
           this.accountService.LocalStorage.saveLocalDataUser(data);
           this.toastr.success('Você finalizou o módulo!', 'Parabéns!');
-          this.router.navigate(['/home']);          
+          this.router.navigate(['/home']);
         },
         () => {
           this.toastr.error('Ocorreu um erro!', 'Opa :(');
@@ -91,6 +134,13 @@ export class PerformComponent implements OnInit {
     }
 
     this.exercise = data;
+
+    if (this.userLevel == 1){
+      setTimeout(()=> {
+        this.introJS.start();
+      }, 1000);
+      
+    }
   }
 
   proccessFail(fail: any) {

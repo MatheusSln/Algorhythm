@@ -16,7 +16,7 @@ import * as introJs from 'intro.js/intro.js';
 export class HomeComponent implements OnInit {
   @ViewChild('content') modalContent: TemplateRef<any>;
 
- introJS = introJs();
+  introJS = introJs();
 
   token: string = '';
   user: any;
@@ -38,7 +38,31 @@ export class HomeComponent implements OnInit {
     private toastr: ToastrService,
     private modalService: NgbModal,
     private spinner: NgxSpinnerService
-  ) {}
+  ) {
+    this.introJS.setOptions({
+      hidePrev: true,
+      exitOnOverlayClick: false,
+      dontShowAgain: true,
+      disableInteraction: true,
+      nextLabel: 'Próximo',
+      prevLabel: 'Voltar',
+      doneLabel: 'Pronto',
+      dontShowAgainLabel: 'Não mostrar novamente',
+      steps: [
+        {
+          element: '#step1',
+          intro:
+            'Aqui você pode acessar informações sobre o seu perfil e realizar alterações.',
+          position: 'bottom',
+        },
+        {
+          element: '#step2',
+          intro: 'Ao clicar em "Entrar" você inicia a realização do módulo.',
+          position: 'right',
+        },
+      ],
+    });
+  }
 
   ngOnInit(): void {
     this.spinner.show();
@@ -56,11 +80,12 @@ export class HomeComponent implements OnInit {
         (modules) => (this.modules = modules),
         () => this.proccessError(true)
       );
+      if (this.userLevel == 1) {
+        this.introJS.start();
+      }
     }
 
     this.spinner.hide();
-
-    this.introJS.start();
   }
 
   loggedUser(): boolean {
@@ -111,13 +136,12 @@ export class HomeComponent implements OnInit {
       this.accountService
         .restartModuleByUser(this.moduleToRestart, this.user.id)
         .subscribe(
-          () =>{
-              this.router.navigate(['/exercise/perform/' + this.moduleToRestart]),
-            this.modalService.dismissAll()
+          () => {
+            this.router.navigate(['/exercise/perform/' + this.moduleToRestart]),
+              this.modalService.dismissAll();
           },
           () => this.proccessError(false)
         );
     }
   }
-
 }

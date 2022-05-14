@@ -9,12 +9,12 @@
                         <div class="col-md pt-5">
                             <a [routerLink]="['/home']" class="d-flex justify-content-center"> X</a>
                             <br>
-                            <p class="d-flex justify-content-center question"> {{exercise.question}} </p>
+                            <p class="d-flex justify-content-center question" id="question"> {{exercise.question}} </p>
                         </div>
                     </div>
                     <div class="d-flex justify-content-center col-12 py-4 ">
                         <form novalidate [formGroup]="answerForm">
-                        <ul class="list-group list-group-horizontal  alternative">
+                        <ul class="list-group list-group-horizontal  alternative" id="alternatives">
                             <li *ngFor="let item of exercise.alternatives" class="">
 
                                 <input type="radio" class="alternative" id="{{item}}" value="{{item}}" name="radio" formControlName="radio" />
@@ -35,8 +35,8 @@
                         <div class="col-md pt-2">
                             <div class="d-flex justify-content-between col-12 ">
                                 <button type="button" class="d-flex btn butao skip"
-                                    (click)="skipExercise()">Pular</button>
-                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao" (click)="verifyAnswer()" [disabled]="!answerForm.dirty">Verificar</button>
+                                    (click)="skipExercise()" id="skip">Pular</button>
+                                <button type="button" class="d-flex btn btn-success ml-2 p-2 butao" (click)="verifyAnswer()" [disabled]="!answerForm.dirty" id="verify">Verificar</button>
                             </div>
                         </div>
                     </div>

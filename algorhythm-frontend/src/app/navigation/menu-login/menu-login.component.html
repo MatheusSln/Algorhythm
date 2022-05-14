@@ -6,7 +6,7 @@
         <a class="btn btn-success" [routerLink]="['/account/register']">Crie sua conta</a>
     </li>
 
-    <li *ngSwitchCase="true" class="nav-item">
+    <li *ngSwitchCase="true" class="nav-item" id="step1">
         <a class="nav-link text-dark" id="saudacaoUsuario" [routerLink]="['/account/edit']">{{ name }}</a>
     </li>
     <li *ngSwitchCase="true" class="nav-item">

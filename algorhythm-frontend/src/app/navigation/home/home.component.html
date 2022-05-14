@@ -21,8 +21,8 @@
                     <h4 class="card-title">Introdução a Algoritmos</h4>
                     <p class="card-text">Aprenda a introdução sobre algoritmos e entenda o que é e para o que é usado na programação.</p>
                 </div>
-                <div class="card-footer" id="step1" data-intro='Teste intro!!'>
-                    <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(1)" (click)="access(1)" >Entrar</button>
+                <div class="card-footer" id="step2">
+                    <button type="button" class="btn btn-success" *ngIf="loggedUser()" [disabled]="canAccess(1)" (click)="access(1)">Entrar</button>
                     <button type="button" class="btn btn-primary" *ngIf="!loggedUser()" [routerLink]="['/account/login']">Saiba mais</button>
                 </div>
             </div>
