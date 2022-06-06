@@ -114,6 +114,14 @@ namespace Algorhythm.Api.Controllers
 
             if (!user.Email.Equals(userDto.Email))
             {
+                var alreadyExist = await _userRepository.GetUserAndExercisesByEmail(userDto.Email);
+
+                if (alreadyExist is not null)
+                {
+                    NotifyError("Não foi possível realizar a alteração, já existe uma conta cadastrada com este e-mail");
+                    return CustomResponse(userDto);
+                }
+
                 var identityUser = await _userManager.FindByEmailAsync(user.Email);
 
                 identityUser.UserName = userDto.Email;

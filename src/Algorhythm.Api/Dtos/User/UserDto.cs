@@ -9,8 +9,8 @@ namespace Algorhythm.Api.Dtos.User
         [Required]
         public Guid Id { get; set; }
 
-        [Required(ErrorMessage = "O campo e-mail é obrigatório")]
-        [EmailAddress(ErrorMessage = "O campo e-mail está em formato inválido")]
+        [Required(ErrorMessage = "Informe o e-mail")]
+        [EmailAddress(ErrorMessage = "E-mail inválido")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "O campo nome é obrigatório")]

@@ -57,11 +57,11 @@ export class CreateComponent implements OnInit, AfterViewInit {
   constructor(private fb: FormBuilder, private toastr: ToastrService, private router: Router, private exerciseService: ExerciseService) {
     this.validationMessage = {
       moduleId: {
-        required: 'Informe o modulo'
+        required: 'Informe o módulo'
       },
       question: {
         required: 'Informe o enunciado',
-        rangeLength: 'o enunciado precisa ter no mínimo 10 caracteres'
+        rangeLength: 'O enunciado precisa ter no mínimo 10 caracteres'
       },
       correctAlternative: {
         required: 'Informe a resposta da questão'

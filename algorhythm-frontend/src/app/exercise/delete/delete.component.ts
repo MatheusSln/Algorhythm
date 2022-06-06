@@ -43,7 +43,7 @@ export class DeleteComponent {
   }
 
   successDelete() {
-    this.toastr.success('Exercício excluido com Sucesso!', 'Até mais! :D');
+    this.toastr.success('Exercício excluído com Sucesso!', 'Até mais! :D');
     
     this.router.navigate(['exercise/list']);
   }

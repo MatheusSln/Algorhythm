@@ -36,7 +36,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
-                    email: 'Email inválido'
+                    email: 'E-mail inválido'
                   },
                   name: {
                     required: 'Informe seu nome',

@@ -10,16 +10,16 @@ namespace Algorhythm.Api.Dtos
         [Key]
         public string Id { get; set; }
 
-        [Required(ErrorMessage = "Este campo é obrigatório")]
+        [Required(ErrorMessage = "Informe o módulo")]
         public int ModuleId { get; set; }
 
-        [Required(ErrorMessage = "Este campo é obrigatório")]
+        [Required(ErrorMessage = "Informe o enunciado")]
         [StringLength(300, ErrorMessage = "Este campo precisa ter no entre {2} e {1} caracteres", MinimumLength = 10)]
         public string Question { get; set; }
 
         public List<string> Alternatives { get; set; }
 
-        [Required(ErrorMessage = "Este campo é obrigatório")]
+        [Required(ErrorMessage = "Informe a explicação da questão")]
         public string CorrectAlternative { get; set; }
 
         public int Level { get; set; }
