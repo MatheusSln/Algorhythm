@@ -1,10 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChildren } from "@angular/core";
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChildren } from "@angular/core";
 import { FormBuilder, FormControlName, FormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
 import { CustomValidators } from '@narik/custom-validators';
 import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { NgxSpinnerService } from "ngx-spinner";
 import { ToastrService } from "ngx-toastr";
+import { fromEvent, merge, Observable } from "rxjs";
 import { DisplayMessage, GenericValidator, ValidationMessages } from "src/app/utils/generic-form-validation";
 import { LocalStorageUtils } from "src/app/utils/localstorage";
 import { User } from "../models/user";
@@ -14,7 +15,7 @@ import { AccountService } from "../services/account.service";
     selector: 'app-edit',
     templateUrl: './edit.component.html'
   })
-export class UserEditComponent implements OnInit{
+export class UserEditComponent implements OnInit, AfterViewInit{
 
     @ViewChildren(FormControlName, {read: ElementRef}) formInputElements: ElementRef[];
 
@@ -79,6 +80,15 @@ export class UserEditComponent implements OnInit{
             this.fillForm(this.user)
         }
     }
+
+    ngAfterViewInit(): void {
+      let controlBlurs: Observable<any>[] = this.formInputElements
+        .map((formControl: ElementRef) => fromEvent(formControl.nativeElement, 'blur'));
+  
+      merge(...controlBlurs).subscribe(() => {
+        this.displayMessage = this.genericValidator.processMessages(this.editForm);
+      });      
+    }    
 
     fillForm(user: any){
         this.editForm.patchValue({
