@@ -1,6 +1,8 @@
 <div class="container main-container">
     <h1>Cadastro</h1>
 
+    <ngx-spinner bdColor = "rgba(0, 0, 0, 0.8)" size = "default" color = "#00b9ff" type = "pacman" [fullScreen] = "true"><p style="color: white" > Carregando... </p></ngx-spinner>  
+
     <form novalidate (ngSubmit)="addAccount(content)" [formGroup]="registerForm">
 
         <h4>Crie sua conta</h4>

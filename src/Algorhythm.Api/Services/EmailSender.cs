@@ -34,6 +34,7 @@ namespace Algorhythm.Api.Services
             SmtpClient smtpClient = new("smtp.gmail.com", 587)
             {
                 EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
                 UseDefaultCredentials = false,
                 Credentials = new NetworkCredential(apiEmail, apiPassword)
             };

@@ -59,7 +59,7 @@ export class UpdateComponent implements OnInit, AfterViewInit {
       },
       question: {
         required: 'Informe o enunciado',
-        rangeLength: 'o enunciado precisa ter no mínimo 10 caracteres'
+        rangeLength: 'o enunciado precisa ter no mínimo 10 e no máximo 300 caracteres'
       },
       correctAlternative: {
         required: 'Informe a resposta da questão'

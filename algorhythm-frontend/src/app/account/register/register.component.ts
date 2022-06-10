@@ -9,6 +9,7 @@ import { User } from '../models/user';
 import { AccountService } from '../services/account.service';
 import { ToastrService } from 'ngx-toastr';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Component({
   selector: 'app-register',
@@ -32,7 +33,8 @@ export class RegisterComponent implements OnInit, AfterViewInit {
               private accountService: AccountService,
               private router: Router,
               private toastr: ToastrService,
-              private modalService: NgbModal,) {
+              private modalService: NgbModal,
+              private spinner: NgxSpinnerService) {
                 this.validationMessage= {
                   email: {
                     required: 'Informe o e-mail',
@@ -83,6 +85,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   addAccount(content) {
+    this.spinner.show();
       if (this.registerForm.dirty && this.registerForm.valid) {
           this.user =  Object.assign({}, this.user, this.registerForm.value);
 
@@ -97,6 +100,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   proccessSuccess(content: any){
+    this.spinner.hide();
       this.registerForm.reset();
       this.errors = [];
 
@@ -108,6 +112,7 @@ export class RegisterComponent implements OnInit, AfterViewInit {
   }
 
   proccessFail(fail : any){
+    this.spinner.hide();
       this.errors = fail.error.errors;
       this.toastr.error('Ocorreu um erro!', 'Opa :(');
   }
